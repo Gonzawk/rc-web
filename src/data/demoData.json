@@ -1,0 +1,1701 @@
+{
+  "settings": {
+    "technicalName": "RCRepuestosYAccesorios",
+    "displayName": "RC Repuestos y Accesorios",
+    "tagline": "Repuestos · Accesorios · Atención personalizada",
+    "heroTitle": "Todo para tu moto. En un solo lugar.",
+    "heroSubtitle": "Repuestos, accesorios y equipamiento con catálogo online y atención directa por WhatsApp.",
+    "phone": "+54 9 383 400-1122",
+    "whatsapp": "5493834001122",
+    "email": "ventas@rcrepuestosyaccesorios.com.ar",
+    "address": "Catamarca, Argentina",
+    "instagram": "@rcrepuestosyaccesorios",
+    "domain": "www.rcrepuestosyaccesorios.com.ar",
+    "businessHours": "Lun a Sáb · 08:30 a 19:30",
+    "storeEnabled": true,
+    "showPrices": true,
+    "accent": "#ef1f26",
+    "ordersEnabled": true,
+    "storePickupMessage": "Confirmamos disponibilidad, compatibilidad y retiro/envío por WhatsApp.",
+    "currency": "ARS",
+    "lowStockThreshold": 4,
+    "priceRoundingStep": 500,
+    "priceRoundingMode": "up",
+    "wholesaleMessage": "¿Buscás precio mayorista? Escribinos por WhatsApp indicando producto y cantidad. Armamos cotización personalizada.",
+    "desktopBannerRatio": "21:8",
+    "mobileBannerRatio": "4:5"
+  },
+  "brands": [
+    {
+      "id": 1,
+      "name": "Honda",
+      "active": true,
+      "defaultMarkupPercent": 18
+    },
+    {
+      "id": 2,
+      "name": "NGK",
+      "active": true,
+      "defaultMarkupPercent": 22
+    },
+    {
+      "id": 3,
+      "name": "SKF",
+      "active": true,
+      "defaultMarkupPercent": 20
+    },
+    {
+      "id": 4,
+      "name": "Corven",
+      "active": true,
+      "defaultMarkupPercent": 24
+    },
+    {
+      "id": 5,
+      "name": "WStandard",
+      "active": true,
+      "defaultMarkupPercent": 28
+    },
+    {
+      "id": 6,
+      "name": "DID",
+      "active": true,
+      "defaultMarkupPercent": 22
+    },
+    {
+      "id": 7,
+      "name": "Pietcard",
+      "active": true,
+      "defaultMarkupPercent": 25
+    },
+    {
+      "id": 8,
+      "name": "ProTaper",
+      "active": true,
+      "defaultMarkupPercent": 28
+    },
+    {
+      "id": 9,
+      "name": "BMB",
+      "active": true,
+      "defaultMarkupPercent": 24
+    },
+    {
+      "id": 10,
+      "name": "Wirtz",
+      "active": true,
+      "defaultMarkupPercent": 26
+    },
+    {
+      "id": 11,
+      "name": "Motul",
+      "active": true,
+      "defaultMarkupPercent": 20
+    },
+    {
+      "id": 12,
+      "name": "Yuasa",
+      "active": true,
+      "defaultMarkupPercent": 18
+    },
+    {
+      "id": 13,
+      "name": "Brembo",
+      "active": true,
+      "defaultMarkupPercent": 25
+    },
+    {
+      "id": 14,
+      "name": "Kenda",
+      "active": true,
+      "defaultMarkupPercent": 22
+    }
+  ],
+  "productCategories": [
+    {
+      "id": 1,
+      "name": "Motor",
+      "active": true,
+      "subcategories": [
+        {
+          "id": 101,
+          "name": "Cilindros y pistones",
+          "active": true
+        },
+        {
+          "id": 102,
+          "name": "Encendido",
+          "active": true
+        },
+        {
+          "id": 103,
+          "name": "Filtros",
+          "active": true
+        },
+        {
+          "id": 104,
+          "name": "Distribución",
+          "active": true
+        },
+        {
+          "id": 105,
+          "name": "Juntas y retenes",
+          "active": true
+        }
+      ]
+    },
+    {
+      "id": 2,
+      "name": "Transmisión",
+      "active": true,
+      "subcategories": [
+        {
+          "id": 201,
+          "name": "Kit transmisión",
+          "active": true
+        },
+        {
+          "id": 202,
+          "name": "Cadenas",
+          "active": true
+        },
+        {
+          "id": 203,
+          "name": "Coronas y piñones",
+          "active": true
+        },
+        {
+          "id": 204,
+          "name": "Rulemanes",
+          "active": true
+        },
+        {
+          "id": 205,
+          "name": "Cables",
+          "active": true
+        }
+      ]
+    },
+    {
+      "id": 3,
+      "name": "Frenos",
+      "active": true,
+      "subcategories": [
+        {
+          "id": 301,
+          "name": "Pastillas de freno",
+          "active": true
+        },
+        {
+          "id": 302,
+          "name": "Discos",
+          "active": true
+        },
+        {
+          "id": 303,
+          "name": "Zapatas",
+          "active": true
+        },
+        {
+          "id": 304,
+          "name": "Bombas de freno",
+          "active": true
+        },
+        {
+          "id": 305,
+          "name": "Manijas",
+          "active": true
+        }
+      ]
+    },
+    {
+      "id": 4,
+      "name": "Electricidad",
+      "active": true,
+      "subcategories": [
+        {
+          "id": 401,
+          "name": "Baterías",
+          "active": true
+        },
+        {
+          "id": 402,
+          "name": "Bobinas",
+          "active": true
+        },
+        {
+          "id": 403,
+          "name": "CDI",
+          "active": true
+        },
+        {
+          "id": 404,
+          "name": "Reguladores",
+          "active": true
+        },
+        {
+          "id": 405,
+          "name": "Lámparas y LED",
+          "active": true
+        }
+      ]
+    },
+    {
+      "id": 5,
+      "name": "Carburación",
+      "active": true,
+      "subcategories": [
+        {
+          "id": 501,
+          "name": "Carburadores",
+          "active": true
+        },
+        {
+          "id": 502,
+          "name": "Admisiones / bridas",
+          "active": true
+        },
+        {
+          "id": 503,
+          "name": "Chicleres",
+          "active": true
+        },
+        {
+          "id": 504,
+          "name": "Filtros de competición",
+          "active": true
+        }
+      ]
+    },
+    {
+      "id": 6,
+      "name": "Suspensión",
+      "active": true,
+      "subcategories": [
+        {
+          "id": 601,
+          "name": "Amortiguadores",
+          "active": true
+        },
+        {
+          "id": 602,
+          "name": "Barrales",
+          "active": true
+        },
+        {
+          "id": 603,
+          "name": "Retenes",
+          "active": true
+        },
+        {
+          "id": 604,
+          "name": "Horquillones",
+          "active": true
+        }
+      ]
+    },
+    {
+      "id": 7,
+      "name": "Accesorios",
+      "active": true,
+      "subcategories": [
+        {
+          "id": 701,
+          "name": "Manubrios",
+          "active": true
+        },
+        {
+          "id": 702,
+          "name": "Puños",
+          "active": true
+        },
+        {
+          "id": 703,
+          "name": "Espejos",
+          "active": true
+        },
+        {
+          "id": 704,
+          "name": "Cubre manos",
+          "active": true
+        },
+        {
+          "id": 705,
+          "name": "Cascos",
+          "active": true
+        }
+      ]
+    },
+    {
+      "id": 8,
+      "name": "Lubricantes",
+      "active": true,
+      "subcategories": [
+        {
+          "id": 801,
+          "name": "Aceite motor",
+          "active": true
+        },
+        {
+          "id": 802,
+          "name": "Aceite suspensión",
+          "active": true
+        },
+        {
+          "id": 803,
+          "name": "Limpieza cadena",
+          "active": true
+        },
+        {
+          "id": 804,
+          "name": "Grasas",
+          "active": true
+        }
+      ]
+    }
+  ],
+  "suppliers": [
+    {
+      "id": 1,
+      "name": "MotoPartes Norte",
+      "taxId": "30-71234567-8",
+      "phone": "3834551100",
+      "email": "ventas@motopartes.demo",
+      "notes": "Proveedor principal. Entrega semanal.",
+      "active": true,
+      "defaultMarkupPercent": 12
+    },
+    {
+      "id": 2,
+      "name": "Distribuidora Centro",
+      "taxId": "30-70999888-1",
+      "phone": "3834332211",
+      "email": "pedidos@dcentro.demo",
+      "notes": "Buena cobertura de marcas alternativas.",
+      "active": true,
+      "defaultMarkupPercent": 15
+    },
+    {
+      "id": 3,
+      "name": "Importadora Federal",
+      "taxId": "30-72111444-2",
+      "phone": "3815559090",
+      "email": "comercial@ifederal.demo",
+      "notes": "Rulemanes y línea eléctrica.",
+      "active": true,
+      "defaultMarkupPercent": 10
+    }
+  ],
+  "products": [
+    {
+      "id": 1,
+      "sku": "NGK-CPR8EA9",
+      "oemCode": "31916-KRM-841",
+      "name": "Bujía NGK CPR8EA-9",
+      "brand": "NGK",
+      "supplier": "MotoPartes Norte",
+      "category": "Motor",
+      "subcategory": "Encendido",
+      "price": 12500,
+      "stock": 18,
+      "size": "Unidad",
+      "active": true,
+      "featured": true,
+      "image": "https://images.unsplash.com/photo-1486262715619-67b85e0b08d3?auto=format&fit=crop&w=900&q=80",
+      "description": "Bujía de encendido para motos de baja y media cilindrada.",
+      "compatibility": "Honda CG 150 / Titan / Fan - verificar año",
+      "costPrice": 7200,
+      "pricingRules": [
+        {
+          "id": 1,
+          "name": "Proveedor",
+          "percent": 12
+        },
+        {
+          "id": 2,
+          "name": "Marca NGK",
+          "percent": 22
+        },
+        {
+          "id": 3,
+          "name": "Producto",
+          "percent": 8
+        }
+      ],
+      "autoPrice": true,
+      "minStock": 6,
+      "trackStock": true,
+      "lastCostAt": "2026-09-08T12:00:00.000Z"
+    },
+    {
+      "id": 2,
+      "sku": "SKF-6302-2RS",
+      "oemCode": "6302-2RS",
+      "name": "Rulemán SKF 6302 2RS",
+      "brand": "SKF",
+      "supplier": "Importadora Federal",
+      "category": "Transmisión",
+      "subcategory": "Rulemanes",
+      "price": 15500,
+      "stock": 7,
+      "size": "Unidad",
+      "active": true,
+      "featured": true,
+      "image": "https://images.unsplash.com/photo-1515923160691-8f9d71fcb0c6?auto=format&fit=crop&w=900&q=80",
+      "description": "Rulemán sellado doble contacto, alta durabilidad.",
+      "compatibility": "Aplicación múltiple · consultar medida",
+      "costPrice": 8900,
+      "pricingRules": [
+        {
+          "id": 1,
+          "name": "Proveedor",
+          "percent": 10
+        },
+        {
+          "id": 2,
+          "name": "Marca SKF",
+          "percent": 20
+        },
+        {
+          "id": 3,
+          "name": "Producto",
+          "percent": 15
+        }
+      ],
+      "autoPrice": true,
+      "minStock": 5,
+      "trackStock": true,
+      "lastCostAt": "2026-09-05T12:00:00.000Z"
+    },
+    {
+      "id": 3,
+      "sku": "HON-FIL-W110",
+      "oemCode": "17211-KWW-640",
+      "name": "Filtro de aire Honda Wave 110",
+      "brand": "Honda",
+      "supplier": "MotoPartes Norte",
+      "category": "Motor",
+      "subcategory": "Filtros",
+      "price": 18500,
+      "stock": 12,
+      "size": "Unidad",
+      "active": true,
+      "featured": true,
+      "image": "https://images.unsplash.com/photo-1632823469850-2f77dd9c7f93?auto=format&fit=crop&w=900&q=80",
+      "description": "Filtro de aire tipo original para mantenimiento preventivo.",
+      "compatibility": "Honda Wave 110 S / NF100 según versión",
+      "costPrice": 11200,
+      "pricingRules": [
+        {
+          "id": 1,
+          "name": "Proveedor",
+          "percent": 12
+        },
+        {
+          "id": 2,
+          "name": "Marca Honda",
+          "percent": 18
+        },
+        {
+          "id": 3,
+          "name": "Producto",
+          "percent": 10
+        }
+      ],
+      "autoPrice": true,
+      "minStock": 4,
+      "trackStock": true,
+      "lastCostAt": "2026-09-07T12:00:00.000Z"
+    },
+    {
+      "id": 4,
+      "sku": "COR-AM-W110",
+      "oemCode": "AM-W110-PAR",
+      "name": "Amortiguadores traseros Wave 110",
+      "brand": "Corven",
+      "supplier": "Distribuidora Centro",
+      "category": "Suspensión",
+      "subcategory": "Amortiguadores",
+      "price": 78000,
+      "stock": 3,
+      "size": "Par",
+      "active": true,
+      "featured": true,
+      "image": "https://images.unsplash.com/photo-1558981806-ec527fa84c39?auto=format&fit=crop&w=900&q=80",
+      "description": "Par de amortiguadores traseros reforzados.",
+      "compatibility": "Honda Wave 110 / similares 325 mm",
+      "costPrice": 46500,
+      "pricingRules": [
+        {
+          "id": 1,
+          "name": "Proveedor",
+          "percent": 15
+        },
+        {
+          "id": 2,
+          "name": "Marca Corven",
+          "percent": 24
+        },
+        {
+          "id": 3,
+          "name": "Producto",
+          "percent": 5
+        }
+      ],
+      "autoPrice": true,
+      "minStock": 3,
+      "trackStock": true,
+      "lastCostAt": "2026-09-04T12:00:00.000Z"
+    },
+    {
+      "id": 5,
+      "sku": "WS-PF-CG150",
+      "oemCode": "PF-CG150",
+      "name": "Pastillas de freno CG 150",
+      "brand": "WStandard",
+      "supplier": "Distribuidora Centro",
+      "category": "Frenos",
+      "subcategory": "Pastillas de freno",
+      "price": 14500,
+      "stock": 21,
+      "size": "Juego",
+      "active": true,
+      "featured": false,
+      "image": "https://images.unsplash.com/photo-1609630875171-b1321377ee65?auto=format&fit=crop&w=900&q=80",
+      "description": "Juego de pastillas delanteras para uso urbano.",
+      "compatibility": "Honda CG 150 / Titan / Fan con cáliper compatible",
+      "costPrice": 7600,
+      "pricingRules": [
+        {
+          "id": 1,
+          "name": "Proveedor",
+          "percent": 15
+        },
+        {
+          "id": 2,
+          "name": "Marca WStandard",
+          "percent": 28
+        },
+        {
+          "id": 3,
+          "name": "Producto",
+          "percent": 10
+        }
+      ],
+      "autoPrice": true,
+      "minStock": 8,
+      "trackStock": true,
+      "lastCostAt": "2026-09-01T12:00:00.000Z"
+    },
+    {
+      "id": 6,
+      "sku": "WS-KIT-110",
+      "oemCode": "428H-36-14",
+      "name": "Kit transmisión 428H Wave 110",
+      "brand": "WStandard",
+      "supplier": "Distribuidora Centro",
+      "category": "Transmisión",
+      "subcategory": "Kit transmisión",
+      "price": 52500,
+      "stock": 9,
+      "size": "Kit",
+      "active": true,
+      "featured": false,
+      "image": "https://images.unsplash.com/photo-1625047509248-ec889cbff17f?auto=format&fit=crop&w=900&q=80",
+      "description": "Cadena reforzada, corona y piñón.",
+      "compatibility": "Honda Wave 110 / Biz 105 según relación",
+      "costPrice": 29800,
+      "pricingRules": [
+        {
+          "id": 1,
+          "name": "Proveedor",
+          "percent": 15
+        },
+        {
+          "id": 2,
+          "name": "Marca WStandard",
+          "percent": 28
+        },
+        {
+          "id": 3,
+          "name": "Producto",
+          "percent": 6
+        }
+      ],
+      "autoPrice": true,
+      "minStock": 4,
+      "trackStock": true,
+      "lastCostAt": "2026-09-03T12:00:00.000Z"
+    },
+    {
+      "id": 7,
+      "sku": "HON-CAB-EMB",
+      "oemCode": "22870-KRM-840",
+      "name": "Cable de embrague CG 150",
+      "brand": "Honda",
+      "supplier": "MotoPartes Norte",
+      "category": "Transmisión",
+      "subcategory": "Cables",
+      "price": 21000,
+      "stock": 5,
+      "size": "Unidad",
+      "active": true,
+      "featured": false,
+      "image": "https://images.unsplash.com/photo-1591637333184-19aa84b3e01f?auto=format&fit=crop&w=900&q=80",
+      "description": "Cable de embrague reforzado con terminales metálicos.",
+      "compatibility": "Honda CG 150 Titan / Fan - verificar largo",
+      "costPrice": 12600,
+      "pricingRules": [
+        {
+          "id": 1,
+          "name": "Proveedor",
+          "percent": 12
+        },
+        {
+          "id": 2,
+          "name": "Marca Honda",
+          "percent": 18
+        },
+        {
+          "id": 3,
+          "name": "Producto",
+          "percent": 12
+        }
+      ],
+      "autoPrice": true,
+      "minStock": 5,
+      "trackStock": true,
+      "lastCostAt": "2026-09-06T12:00:00.000Z"
+    },
+    {
+      "id": 8,
+      "sku": "WS-BAT-YTX5L",
+      "oemCode": "YTX5L-BS",
+      "name": "Batería YTX5L-BS 12V",
+      "brand": "WStandard",
+      "supplier": "Distribuidora Centro",
+      "category": "Electricidad",
+      "subcategory": "Baterías",
+      "price": 62000,
+      "stock": 4,
+      "size": "Unidad",
+      "active": true,
+      "featured": false,
+      "image": "https://images.unsplash.com/photo-1609521263047-f8f205293f24?auto=format&fit=crop&w=900&q=80",
+      "description": "Batería sellada libre de mantenimiento.",
+      "compatibility": "Motos 110/125/150 cc según alojamiento y polaridad",
+      "costPrice": 36500,
+      "pricingRules": [
+        {
+          "id": 1,
+          "name": "Proveedor",
+          "percent": 15
+        },
+        {
+          "id": 2,
+          "name": "Marca WStandard",
+          "percent": 28
+        },
+        {
+          "id": 3,
+          "name": "Producto",
+          "percent": 4
+        }
+      ],
+      "autoPrice": true,
+      "minStock": 3,
+      "trackStock": true,
+      "lastCostAt": "2026-09-02T12:00:00.000Z"
+    },
+    {
+      "id": 9,
+      "sku": "DID-428HD-W110",
+      "oemCode": "",
+      "name": "Kit transmisión DID 428HD Honda Wave 110",
+      "brand": "DID",
+      "supplier": "MotoPartes Norte",
+      "category": "Transmisión",
+      "subcategory": "Kit transmisión",
+      "price": 68900,
+      "stock": 11,
+      "size": "Unidad",
+      "active": true,
+      "featured": true,
+      "image": "https://images.unsplash.com/photo-1558981359-219d6364c9c8?auto=format&fit=crop&w=900&q=80",
+      "description": "Kit transmisión DID 428HD Honda Wave 110 para reposición y mantenimiento.",
+      "compatibility": "Honda Wave 110 / Wave S - verificar relación",
+      "costPrice": 39800,
+      "pricingRules": [
+        {
+          "id": 1,
+          "name": "Proveedor",
+          "percent": 12
+        },
+        {
+          "id": 2,
+          "name": "Marca DID",
+          "percent": 20
+        },
+        {
+          "id": 3,
+          "name": "Producto",
+          "percent": 8
+        }
+      ],
+      "autoPrice": false,
+      "minStock": 4,
+      "trackStock": true,
+      "lastCostAt": "2026-09-01T12:00:00.000Z"
+    },
+    {
+      "id": 10,
+      "sku": "PIE-CDI-CG150",
+      "oemCode": "",
+      "name": "CDI Pietcard Honda CG 150 Titan",
+      "brand": "Pietcard",
+      "supplier": "Distribuidora Centro",
+      "category": "Electricidad",
+      "subcategory": "CDI",
+      "price": 45900,
+      "stock": 8,
+      "size": "Unidad",
+      "active": true,
+      "featured": true,
+      "image": "https://images.unsplash.com/photo-1487754180451-c456f719a1fc?auto=format&fit=crop&w=900&q=80",
+      "description": "CDI Pietcard Honda CG 150 Titan para reposición y mantenimiento.",
+      "compatibility": "Honda CG 150 Titan / Fan según año",
+      "costPrice": 27100,
+      "pricingRules": [
+        {
+          "id": 1,
+          "name": "Proveedor",
+          "percent": 12
+        },
+        {
+          "id": 2,
+          "name": "Marca Pietcard",
+          "percent": 20
+        },
+        {
+          "id": 3,
+          "name": "Producto",
+          "percent": 8
+        }
+      ],
+      "autoPrice": false,
+      "minStock": 4,
+      "trackStock": true,
+      "lastCostAt": "2026-09-01T12:00:00.000Z"
+    },
+    {
+      "id": 11,
+      "sku": "PRO-MAN-28",
+      "oemCode": "",
+      "name": "Manubrio ProTaper 28 mm Competition",
+      "brand": "ProTaper",
+      "supplier": "Distribuidora Centro",
+      "category": "Accesorios",
+      "subcategory": "Manubrios",
+      "price": 118500,
+      "stock": 5,
+      "size": "Unidad",
+      "active": true,
+      "featured": true,
+      "image": "https://images.unsplash.com/photo-1558980664-10ea292dfb70?auto=format&fit=crop&w=900&q=80",
+      "description": "Manubrio ProTaper 28 mm Competition para reposición y mantenimiento.",
+      "compatibility": "Universal 28 mm - requiere torretas compatibles",
+      "costPrice": 72000,
+      "pricingRules": [
+        {
+          "id": 1,
+          "name": "Proveedor",
+          "percent": 12
+        },
+        {
+          "id": 2,
+          "name": "Marca ProTaper",
+          "percent": 20
+        },
+        {
+          "id": 3,
+          "name": "Producto",
+          "percent": 8
+        }
+      ],
+      "autoPrice": false,
+      "minStock": 4,
+      "trackStock": true,
+      "lastCostAt": "2026-09-01T12:00:00.000Z"
+    },
+    {
+      "id": 12,
+      "sku": "BMB-FIL-CR28",
+      "oemCode": "",
+      "name": "Filtro BMB alto flujo carburador 28/30 mm",
+      "brand": "BMB",
+      "supplier": "MotoPartes Norte",
+      "category": "Carburación",
+      "subcategory": "Filtros de competición",
+      "price": 32900,
+      "stock": 14,
+      "size": "Unidad",
+      "active": true,
+      "featured": false,
+      "image": "https://images.unsplash.com/photo-1511919884226-fd3cad34687c?auto=format&fit=crop&w=900&q=80",
+      "description": "Filtro BMB alto flujo carburador 28/30 mm para reposición y mantenimiento.",
+      "compatibility": "Carburadores 28/30 mm - medir boca",
+      "costPrice": 18700,
+      "pricingRules": [
+        {
+          "id": 1,
+          "name": "Proveedor",
+          "percent": 12
+        },
+        {
+          "id": 2,
+          "name": "Marca BMB",
+          "percent": 20
+        },
+        {
+          "id": 3,
+          "name": "Producto",
+          "percent": 8
+        }
+      ],
+      "autoPrice": false,
+      "minStock": 4,
+      "trackStock": true,
+      "lastCostAt": "2026-09-01T12:00:00.000Z"
+    },
+    {
+      "id": 13,
+      "sku": "MOT-5100-10W40",
+      "oemCode": "",
+      "name": "Aceite Motul 5100 10W40 4T 1L",
+      "brand": "Motul",
+      "supplier": "Importadora Federal",
+      "category": "Lubricantes",
+      "subcategory": "Aceite motor",
+      "price": 28900,
+      "stock": 20,
+      "size": "Unidad",
+      "active": true,
+      "featured": true,
+      "image": "https://images.unsplash.com/photo-1632823471565-1ecdf5c6d7f6?auto=format&fit=crop&w=900&q=80",
+      "description": "Aceite Motul 5100 10W40 4T 1L para reposición y mantenimiento.",
+      "compatibility": "Motos 4T según especificación del fabricante",
+      "costPrice": 18400,
+      "pricingRules": [
+        {
+          "id": 1,
+          "name": "Proveedor",
+          "percent": 12
+        },
+        {
+          "id": 2,
+          "name": "Marca Motul",
+          "percent": 20
+        },
+        {
+          "id": 3,
+          "name": "Producto",
+          "percent": 8
+        }
+      ],
+      "autoPrice": false,
+      "minStock": 4,
+      "trackStock": true,
+      "lastCostAt": "2026-09-01T12:00:00.000Z"
+    },
+    {
+      "id": 14,
+      "sku": "YUA-YTX7LBS",
+      "oemCode": "",
+      "name": "Batería Yuasa YTX7L-BS",
+      "brand": "Yuasa",
+      "supplier": "Importadora Federal",
+      "category": "Electricidad",
+      "subcategory": "Baterías",
+      "price": 84200,
+      "stock": 4,
+      "size": "Unidad",
+      "active": true,
+      "featured": false,
+      "image": "https://images.unsplash.com/photo-1619642751034-765dfdf7c58e?auto=format&fit=crop&w=900&q=80",
+      "description": "Batería Yuasa YTX7L-BS para reposición y mantenimiento.",
+      "compatibility": "Aplicación múltiple - verificar medidas y polaridad",
+      "costPrice": 54800,
+      "pricingRules": [
+        {
+          "id": 1,
+          "name": "Proveedor",
+          "percent": 12
+        },
+        {
+          "id": 2,
+          "name": "Marca Yuasa",
+          "percent": 20
+        },
+        {
+          "id": 3,
+          "name": "Producto",
+          "percent": 8
+        }
+      ],
+      "autoPrice": false,
+      "minStock": 4,
+      "trackStock": true,
+      "lastCostAt": "2026-09-01T12:00:00.000Z"
+    }
+  ],
+  "orders": [
+    {
+      "id": 1,
+      "publicCode": "PED-00001",
+      "customerName": "Juan Pérez",
+      "phone": "3834123456",
+      "notes": "Confirmar si sirve para Titan 150 2018.",
+      "status": "pending",
+      "source": "whatsapp",
+      "createdAt": "2026-09-11T12:10:00.000Z",
+      "total": 39500,
+      "items": [
+        {
+          "productId": 1,
+          "sku": "NGK-CPR8EA9",
+          "name": "Bujía NGK CPR8EA-9",
+          "quantity": 1,
+          "unitPrice": 12500,
+          "subtotal": 12500
+        },
+        {
+          "productId": 7,
+          "sku": "HON-CAB-EMB",
+          "name": "Cable de embrague CG 150",
+          "quantity": 1,
+          "unitPrice": 21000,
+          "subtotal": 21000
+        },
+        {
+          "productId": 5,
+          "sku": "WS-PF-CG150",
+          "name": "Pastillas de freno CG 150",
+          "quantity": 1,
+          "unitPrice": 6000,
+          "subtotal": 6000
+        }
+      ]
+    }
+  ],
+  "purchases": [
+    {
+      "id": 1,
+      "number": "COMP-000001",
+      "supplierId": 1,
+      "supplierName": "MotoPartes Norte",
+      "invoiceNumber": "FC-A 0004-001245",
+      "date": "2026-09-08",
+      "notes": "Reposición semanal",
+      "totalCost": 256800,
+      "paymentMethod": "Transferencia",
+      "status": "confirmed",
+      "createdAt": "2026-09-08T15:00:00.000Z",
+      "items": [
+        {
+          "productId": 1,
+          "sku": "NGK-CPR8EA9",
+          "name": "Bujía NGK CPR8EA-9",
+          "quantity": 20,
+          "unitCost": 7200,
+          "subtotal": 144000
+        },
+        {
+          "productId": 3,
+          "sku": "HON-FIL-W110",
+          "name": "Filtro de aire Honda Wave 110",
+          "quantity": 6,
+          "unitCost": 11200,
+          "subtotal": 67200
+        },
+        {
+          "productId": 7,
+          "sku": "HON-CAB-EMB",
+          "name": "Cable de embrague CG 150",
+          "quantity": 4,
+          "unitCost": 11400,
+          "subtotal": 45600
+        }
+      ]
+    },
+    {
+      "id": 2,
+      "number": "COMP-000002",
+      "supplierId": 2,
+      "supplierName": "Distribuidora Centro",
+      "invoiceNumber": "FC-B 0002-000981",
+      "date": "2026-08-20",
+      "notes": "Reposición transmisión y electricidad",
+      "grossTotal": 412000,
+      "discountType": "percent",
+      "discountValue": 7,
+      "discountAmount": 28840,
+      "totalCost": 383160,
+      "paymentMethod": "Transferencia",
+      "status": "confirmed",
+      "createdAt": "2026-08-20T14:00:00.000Z",
+      "items": [
+        {
+          "productId": 9,
+          "sku": "DID-428HD-W110",
+          "name": "Kit transmisión DID 428HD Honda Wave 110",
+          "quantity": 6,
+          "listUnitCost": 43000,
+          "unitCost": 39990,
+          "grossSubtotal": 258000,
+          "discountAllocated": 18060,
+          "subtotal": 239940
+        },
+        {
+          "productId": 10,
+          "sku": "PIE-CDI-CG150",
+          "name": "CDI Pietcard Honda CG 150 Titan",
+          "quantity": 6,
+          "listUnitCost": 25666.67,
+          "unitCost": 23870,
+          "grossSubtotal": 154000,
+          "discountAllocated": 10780,
+          "subtotal": 143220
+        }
+      ]
+    }
+  ],
+  "sales": [
+    {
+      "id": 1,
+      "number": "VTA-000001",
+      "source": "pos",
+      "orderId": null,
+      "customerName": "Venta mostrador",
+      "phone": "",
+      "paymentMethod": "Efectivo",
+      "notes": "Venta demo",
+      "total": 81500,
+      "costTotal": 46300,
+      "grossProfit": 35200,
+      "createdAt": "2026-09-10T18:15:00.000Z",
+      "items": [
+        {
+          "productId": 5,
+          "sku": "WS-PF-CG150",
+          "name": "Pastillas de freno CG 150",
+          "quantity": 2,
+          "unitPrice": 14500,
+          "unitCost": 7600,
+          "subtotal": 29000
+        },
+        {
+          "productId": 6,
+          "sku": "WS-KIT-110",
+          "name": "Kit transmisión 428H Wave 110",
+          "quantity": 1,
+          "unitPrice": 52500,
+          "unitCost": 29800,
+          "subtotal": 52500
+        }
+      ]
+    },
+    {
+      "id": 2,
+      "number": "VTA-000002",
+      "source": "pos",
+      "orderId": null,
+      "customerName": "Carlos M.",
+      "phone": "",
+      "paymentMethod": "Transferencia",
+      "notes": "Venta demo",
+      "total": 31000,
+      "costTotal": 16100,
+      "grossProfit": 14900,
+      "createdAt": "2026-09-09T11:20:00.000Z",
+      "items": [
+        {
+          "productId": 1,
+          "sku": "NGK-CPR8EA9",
+          "name": "Bujía NGK CPR8EA-9",
+          "quantity": 1,
+          "unitPrice": 12500,
+          "unitCost": 7200,
+          "subtotal": 12500
+        },
+        {
+          "productId": 2,
+          "sku": "SKF-6302-2RS",
+          "name": "Rulemán SKF 6302 2RS",
+          "quantity": 1,
+          "unitPrice": 18500,
+          "unitCost": 8900,
+          "subtotal": 18500
+        }
+      ]
+    },
+    {
+      "id": 3,
+      "number": "VTA-000003",
+      "createdAt": "2026-08-28T16:25:00.000Z",
+      "source": "pos",
+      "customerName": "Venta mostrador",
+      "paymentMethod": "Transferencia",
+      "discountType": "percent",
+      "discountValue": 5,
+      "orderId": null,
+      "phone": "",
+      "notes": "Datos demo históricos",
+      "grossTotal": 89100,
+      "discountAmount": 4455.0,
+      "total": 84645.0,
+      "costTotal": 54200,
+      "grossProfit": 30445.0,
+      "items": [
+        {
+          "productId": 1,
+          "sku": "NGK-CPR8EA9",
+          "name": "Bujía NGK CPR8EA-9",
+          "quantity": 2,
+          "listUnitPrice": 11800,
+          "unitPrice": 11210.0,
+          "unitCost": 7200,
+          "grossSubtotal": 23600,
+          "discountAllocated": 1180.0,
+          "subtotal": 22420.0
+        },
+        {
+          "productId": 9,
+          "sku": "DID-428HD-W110",
+          "name": "Kit transmisión DID 428HD Honda Wave 110",
+          "quantity": 1,
+          "listUnitPrice": 65500,
+          "unitPrice": 62225.0,
+          "unitCost": 39800,
+          "grossSubtotal": 65500,
+          "discountAllocated": 3275.0,
+          "subtotal": 62225.0
+        }
+      ]
+    },
+    {
+      "id": 4,
+      "number": "VTA-000004",
+      "createdAt": "2026-08-14T11:10:00.000Z",
+      "source": "whatsapp_order",
+      "customerName": "Taller El Rayo",
+      "paymentMethod": "Transferencia",
+      "discountType": "percent",
+      "discountValue": 8,
+      "orderId": null,
+      "phone": "",
+      "notes": "Datos demo históricos",
+      "grossTotal": 158400,
+      "discountAmount": 12672.0,
+      "total": 145728.0,
+      "costTotal": 91200,
+      "grossProfit": 54528.0,
+      "items": [
+        {
+          "productId": 5,
+          "sku": "WS-PF-CG150",
+          "name": "Pastillas de freno CG 150",
+          "quantity": 6,
+          "listUnitPrice": 13200,
+          "unitPrice": 12144.0,
+          "unitCost": 7600,
+          "grossSubtotal": 79200,
+          "discountAllocated": 6336.0,
+          "subtotal": 72864.0
+        },
+        {
+          "productId": 7,
+          "sku": "HON-CAB-EMB",
+          "name": "Cable de embrague CG 150",
+          "quantity": 4,
+          "listUnitPrice": 19800,
+          "unitPrice": 18216.0,
+          "unitCost": 11400,
+          "grossSubtotal": 79200,
+          "discountAllocated": 6336.0,
+          "subtotal": 72864.0
+        }
+      ]
+    },
+    {
+      "id": 5,
+      "number": "VTA-000005",
+      "createdAt": "2026-07-25T18:40:00.000Z",
+      "source": "pos",
+      "customerName": "Venta mostrador",
+      "paymentMethod": "Efectivo",
+      "discountType": "amount",
+      "discountValue": 3000,
+      "orderId": null,
+      "phone": "",
+      "notes": "Datos demo históricos",
+      "grossTotal": 73500,
+      "discountAmount": 3000,
+      "total": 70500,
+      "costTotal": 48000,
+      "grossProfit": 22500,
+      "items": [
+        {
+          "productId": 13,
+          "sku": "MOT-5100-10W40",
+          "name": "Aceite Motul 5100 10W40 4T 1L",
+          "quantity": 2,
+          "listUnitPrice": 27500,
+          "unitPrice": 26377.551020408162,
+          "unitCost": 18400,
+          "grossSubtotal": 55000,
+          "discountAllocated": 2244.897959183676,
+          "subtotal": 52755.102040816324
+        },
+        {
+          "productId": 3,
+          "sku": "HON-FIL-W110",
+          "name": "Filtro de aire Honda Wave 110",
+          "quantity": 1,
+          "listUnitPrice": 18500,
+          "unitPrice": 17744.897959183672,
+          "unitCost": 11200,
+          "grossSubtotal": 18500,
+          "discountAllocated": 755.1020408163276,
+          "subtotal": 17744.897959183672
+        }
+      ]
+    },
+    {
+      "id": 6,
+      "number": "VTA-000006",
+      "createdAt": "2026-07-08T12:00:00.000Z",
+      "source": "whatsapp_order",
+      "customerName": "Repuestos Norte",
+      "paymentMethod": "Transferencia",
+      "discountType": "percent",
+      "discountValue": 10,
+      "orderId": null,
+      "phone": "",
+      "notes": "Datos demo históricos",
+      "grossTotal": 278000,
+      "discountAmount": 27800.0,
+      "total": 250200.0,
+      "costTotal": 173600,
+      "grossProfit": 76600.0,
+      "items": [
+        {
+          "productId": 9,
+          "sku": "DID-428HD-W110",
+          "name": "Kit transmisión DID 428HD Honda Wave 110",
+          "quantity": 3,
+          "listUnitPrice": 64000,
+          "unitPrice": 57600.0,
+          "unitCost": 39800,
+          "grossSubtotal": 192000,
+          "discountAllocated": 19200.0,
+          "subtotal": 172800.0
+        },
+        {
+          "productId": 10,
+          "sku": "PIE-CDI-CG150",
+          "name": "CDI Pietcard Honda CG 150 Titan",
+          "quantity": 2,
+          "listUnitPrice": 43000,
+          "unitPrice": 38700.0,
+          "unitCost": 27100,
+          "grossSubtotal": 86000,
+          "discountAllocated": 8600.0,
+          "subtotal": 77400.0
+        }
+      ]
+    },
+    {
+      "id": 7,
+      "number": "VTA-000007",
+      "createdAt": "2026-06-18T17:30:00.000Z",
+      "source": "pos",
+      "customerName": "Venta mostrador",
+      "paymentMethod": "Mercado Pago",
+      "discountType": "none",
+      "discountValue": 0,
+      "orderId": null,
+      "phone": "",
+      "notes": "Datos demo históricos",
+      "grossTotal": 68500,
+      "discountAmount": 0,
+      "total": 68500,
+      "costTotal": 39400,
+      "grossProfit": 29100,
+      "items": [
+        {
+          "productId": 1,
+          "sku": "NGK-CPR8EA9",
+          "name": "Bujía NGK CPR8EA-9",
+          "quantity": 3,
+          "listUnitPrice": 12500,
+          "unitPrice": 12500.0,
+          "unitCost": 7200,
+          "grossSubtotal": 37500,
+          "discountAllocated": 0.0,
+          "subtotal": 37500.0
+        },
+        {
+          "productId": 2,
+          "sku": "SKF-6302-2RS",
+          "name": "Rulemán SKF 6302 2RS",
+          "quantity": 2,
+          "listUnitPrice": 15500,
+          "unitPrice": 15500.0,
+          "unitCost": 8900,
+          "grossSubtotal": 31000,
+          "discountAllocated": 0.0,
+          "subtotal": 31000.0
+        }
+      ]
+    }
+  ],
+  "stockMovements": [
+    {
+      "id": 1,
+      "productId": 5,
+      "sku": "WS-PF-CG150",
+      "productName": "Pastillas de freno CG 150",
+      "type": "sale",
+      "quantity": -2,
+      "stockAfter": 21,
+      "unitCost": 7600,
+      "reference": "VTA-000001",
+      "note": "Venta mostrador",
+      "createdAt": "2026-09-10T18:15:00.000Z"
+    },
+    {
+      "id": 2,
+      "productId": 6,
+      "sku": "WS-KIT-110",
+      "productName": "Kit transmisión 428H Wave 110",
+      "type": "sale",
+      "quantity": -1,
+      "stockAfter": 9,
+      "unitCost": 29800,
+      "reference": "VTA-000001",
+      "note": "Venta mostrador",
+      "createdAt": "2026-09-10T18:15:00.000Z"
+    },
+    {
+      "id": 3,
+      "productId": 1,
+      "sku": "NGK-CPR8EA9",
+      "productName": "Bujía NGK CPR8EA-9",
+      "type": "purchase",
+      "quantity": 20,
+      "stockAfter": 18,
+      "unitCost": 7200,
+      "reference": "COMP-000001",
+      "note": "Compra a MotoPartes Norte",
+      "createdAt": "2026-09-08T15:00:00.000Z"
+    }
+  ],
+  "cashMovements": [
+    {
+      "id": 1,
+      "direction": "in",
+      "category": "product_sale",
+      "concept": "Venta de productos · VTA-000001",
+      "amount": 81500,
+      "paymentMethod": "Efectivo",
+      "reference": "VTA-000001",
+      "source": "sale",
+      "sourceId": 1,
+      "notes": "Venta mostrador",
+      "createdAt": "2026-09-10T18:15:00.000Z"
+    },
+    {
+      "id": 2,
+      "direction": "in",
+      "category": "product_sale",
+      "concept": "Venta de productos · VTA-000002",
+      "amount": 31000,
+      "paymentMethod": "Transferencia",
+      "reference": "VTA-000002",
+      "source": "sale",
+      "sourceId": 2,
+      "notes": "Carlos M.",
+      "createdAt": "2026-09-09T11:20:00.000Z"
+    },
+    {
+      "id": 3,
+      "direction": "out",
+      "category": "purchase",
+      "concept": "Compra de mercadería · MotoPartes Norte",
+      "amount": 256800,
+      "paymentMethod": "Transferencia",
+      "reference": "COMP-000001",
+      "source": "purchase",
+      "sourceId": 1,
+      "notes": "FC-A 0004-001245",
+      "createdAt": "2026-09-08T15:00:00.000Z"
+    },
+    {
+      "id": 4,
+      "direction": "in",
+      "category": "capital_deposit",
+      "concept": "Aporte inicial de caja",
+      "amount": 400000,
+      "paymentMethod": "Efectivo",
+      "reference": "APORTE-000001",
+      "source": "manual",
+      "sourceId": null,
+      "notes": "Demo",
+      "createdAt": "2026-09-01T09:00:00.000Z"
+    },
+    {
+      "id": 5,
+      "direction": "in",
+      "category": "product_sale",
+      "concept": "Venta de productos · VTA-000003",
+      "amount": 84645.0,
+      "paymentMethod": "Transferencia",
+      "reference": "VTA-000003",
+      "source": "sale",
+      "sourceId": 3,
+      "notes": "Venta mostrador",
+      "createdAt": "2026-08-28T16:25:00.000Z"
+    },
+    {
+      "id": 10,
+      "direction": "out",
+      "category": "purchase",
+      "concept": "Compra de mercadería · Distribuidora Centro",
+      "amount": 383160,
+      "paymentMethod": "Transferencia",
+      "reference": "COMP-000002",
+      "source": "purchase",
+      "sourceId": 2,
+      "notes": "FC-B 0002-000981",
+      "createdAt": "2026-08-20T14:00:00.000Z"
+    },
+    {
+      "id": 6,
+      "direction": "in",
+      "category": "product_sale",
+      "concept": "Venta de productos · VTA-000004",
+      "amount": 145728.0,
+      "paymentMethod": "Transferencia",
+      "reference": "VTA-000004",
+      "source": "sale",
+      "sourceId": 4,
+      "notes": "Taller El Rayo",
+      "createdAt": "2026-08-14T11:10:00.000Z"
+    },
+    {
+      "id": 7,
+      "direction": "in",
+      "category": "product_sale",
+      "concept": "Venta de productos · VTA-000005",
+      "amount": 70500,
+      "paymentMethod": "Efectivo",
+      "reference": "VTA-000005",
+      "source": "sale",
+      "sourceId": 5,
+      "notes": "Venta mostrador",
+      "createdAt": "2026-07-25T18:40:00.000Z"
+    },
+    {
+      "id": 8,
+      "direction": "in",
+      "category": "product_sale",
+      "concept": "Venta de productos · VTA-000006",
+      "amount": 250200.0,
+      "paymentMethod": "Transferencia",
+      "reference": "VTA-000006",
+      "source": "sale",
+      "sourceId": 6,
+      "notes": "Repuestos Norte",
+      "createdAt": "2026-07-08T12:00:00.000Z"
+    },
+    {
+      "id": 9,
+      "direction": "in",
+      "category": "product_sale",
+      "concept": "Venta de productos · VTA-000007",
+      "amount": 68500,
+      "paymentMethod": "Mercado Pago",
+      "reference": "VTA-000007",
+      "source": "sale",
+      "sourceId": 7,
+      "notes": "Venta mostrador",
+      "createdAt": "2026-06-18T17:30:00.000Z"
+    }
+  ],
+  "demoReferenceDate": "2026-09-11T19:00:00.000Z",
+  "webContent": {
+    "banners": [
+      {
+        "id": 1,
+        "active": true,
+        "order": 1,
+        "eyebrow": "TU MOTO, NUESTRA PASIÓN",
+        "title": "Repuestos y accesorios para seguir rodando",
+        "subtitle": "Todo lo que necesitás para mantenimiento, reparación y preparación de tu moto.",
+        "ctaText": "Ver productos",
+        "ctaLink": "/catalogo",
+        "desktopImage": "https://images.unsplash.com/photo-1558981806-ec527fa84c39?auto=format&fit=crop&w=2000&q=88",
+        "mobileImage": "https://images.unsplash.com/photo-1558981806-ec527fa84c39?auto=format&fit=crop&w=900&h=1125&q=88",
+        "overlay": "left"
+      },
+      {
+        "id": 2,
+        "active": true,
+        "order": 2,
+        "eyebrow": "COMPETICIÓN Y PERFORMANCE",
+        "title": "Potenciá tu moto con componentes seleccionados",
+        "subtitle": "Carburación, transmisión, encendido y accesorios para quienes buscan un paso más.",
+        "ctaText": "Explorar competición",
+        "ctaLink": "/catalogo?categoria=Carburación",
+        "desktopImage": "https://images.unsplash.com/photo-1524591652733-73fa1ae7b5ee?auto=format&fit=crop&w=2000&q=88",
+        "mobileImage": "https://images.unsplash.com/photo-1524591652733-73fa1ae7b5ee?auto=format&fit=crop&w=900&h=1125&q=88",
+        "overlay": "left"
+      },
+      {
+        "id": 3,
+        "active": true,
+        "order": 3,
+        "eyebrow": "ATENCIÓN PERSONALIZADA",
+        "title": "¿No sabés qué repuesto lleva tu moto?",
+        "subtitle": "Mandanos modelo, año y foto por WhatsApp. Te ayudamos a encontrar la pieza correcta antes de confirmar.",
+        "ctaText": "Consultar por WhatsApp",
+        "ctaLink": "whatsapp",
+        "desktopImage": "https://images.unsplash.com/photo-1568772585407-9361f9bf3a87?auto=format&fit=crop&w=2000&q=88",
+        "mobileImage": "https://images.unsplash.com/photo-1568772585407-9361f9bf3a87?auto=format&fit=crop&w=900&h=1125&q=88",
+        "overlay": "left"
+      }
+    ],
+    "brandCarousel": [
+      {
+        "id": 1,
+        "name": "Honda",
+        "logoUrl": "/brands/honda.svg",
+        "active": true,
+        "order": 1,
+        "searchQuery": "Honda"
+      },
+      {
+        "id": 2,
+        "name": "Yamaha",
+        "logoUrl": "/brands/yamaha.svg",
+        "active": true,
+        "order": 2,
+        "searchQuery": "Yamaha"
+      },
+      {
+        "id": 3,
+        "name": "Suzuki",
+        "logoUrl": "/brands/suzuki.svg",
+        "active": true,
+        "order": 3,
+        "searchQuery": "Suzuki"
+      },
+      {
+        "id": 4,
+        "name": "Kawasaki",
+        "logoUrl": "/brands/kawasaki.svg",
+        "active": true,
+        "order": 4,
+        "searchQuery": "Kawasaki"
+      },
+      {
+        "id": 5,
+        "name": "Corven",
+        "logoUrl": "/brands/corven.svg",
+        "active": true,
+        "order": 5,
+        "searchQuery": "Corven"
+      },
+      {
+        "id": 6,
+        "name": "NGK",
+        "logoUrl": "/brands/ngk.svg",
+        "active": true,
+        "order": 6,
+        "searchQuery": "NGK"
+      },
+      {
+        "id": 7,
+        "name": "DID",
+        "logoUrl": "/brands/did.svg",
+        "active": true,
+        "order": 7,
+        "searchQuery": "DID"
+      },
+      {
+        "id": 8,
+        "name": "Pietcard",
+        "logoUrl": "/brands/pietcard.svg",
+        "active": true,
+        "order": 8,
+        "searchQuery": "Pietcard"
+      },
+      {
+        "id": 9,
+        "name": "ProTaper",
+        "logoUrl": "/brands/protaper.svg",
+        "active": true,
+        "order": 9,
+        "searchQuery": "ProTaper"
+      },
+      {
+        "id": 10,
+        "name": "BMB",
+        "logoUrl": "/brands/bmb.svg",
+        "active": true,
+        "order": 10,
+        "searchQuery": "BMB"
+      },
+      {
+        "id": 11,
+        "name": "Wirtz",
+        "logoUrl": "/brands/wirtz.svg",
+        "active": true,
+        "order": 11,
+        "searchQuery": "Wirtz"
+      },
+      {
+        "id": 12,
+        "name": "Motul",
+        "logoUrl": "/brands/motul.svg",
+        "active": true,
+        "order": 12,
+        "searchQuery": "Motul"
+      },
+      {
+        "id": 13,
+        "name": "Yuasa",
+        "logoUrl": "/brands/yuasa.svg",
+        "active": true,
+        "order": 13,
+        "searchQuery": "Yuasa"
+      },
+      {
+        "id": 14,
+        "name": "Brembo",
+        "logoUrl": "/brands/brembo.svg",
+        "active": true,
+        "order": 14,
+        "searchQuery": "Brembo"
+      },
+      {
+        "id": 15,
+        "name": "Kenda",
+        "logoUrl": "/brands/kenda.svg",
+        "active": true,
+        "order": 15,
+        "searchQuery": "Kenda"
+      }
+    ]
+  }
+}
