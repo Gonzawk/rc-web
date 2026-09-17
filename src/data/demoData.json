@@ -5,10 +5,10 @@
     "tagline": "Repuestos · Accesorios · Atención personalizada",
     "heroTitle": "Todo para tu moto. En un solo lugar.",
     "heroSubtitle": "Repuestos, accesorios y equipamiento con catálogo online y atención directa por WhatsApp.",
-    "phone": "+54 9 383 246-4384",
-    "whatsapp": "5493832464384",
+    "phone": "+54 9 383 400-1122",
+    "whatsapp": "5493834001122",
     "email": "ventas@rcrepuestosyaccesorios.com.ar",
-    "address": "Recreo, La Paz, Catamarca, Argentina",
+    "address": "Catamarca, Argentina",
     "instagram": "@rcrepuestosyaccesorios",
     "domain": "www.rcrepuestosyaccesorios.com.ar",
     "businessHours": "Lun a Sáb · 08:30 a 19:30",
@@ -23,7 +23,9 @@
     "priceRoundingMode": "up",
     "wholesaleMessage": "¿Buscás precio mayorista? Escribinos por WhatsApp indicando producto y cantidad. Armamos cotización personalizada.",
     "desktopBannerRatio": "21:8",
-    "mobileBannerRatio": "4:5"
+    "mobileBannerRatio": "4:5",
+    "cashTransferDiscountPercent": 10,
+    "onlinePaymentProvider": "Mercado Pago · Checkout Pro"
   },
   "brands": [
     {
@@ -984,7 +986,10 @@
           "unitPrice": 6000,
           "subtotal": 6000
         }
-      ]
+      ],
+      "paymentStatus": "pending",
+      "deliveryType": "pickup",
+      "paymentMethod": "mercadopago"
     }
   ],
   "purchases": [

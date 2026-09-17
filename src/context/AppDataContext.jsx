@@ -200,7 +200,10 @@ export function AppDataProvider({ children }) {
           return { productId:product.id, sku:product.sku, name:product.name, quantity:Number(row.quantity), unitPrice:Number(product.price), subtotal:Number(row.quantity)*Number(product.price) }
         })
         const id = nextId(orders)
-        created = { ...order, id, publicCode:`PED-${String(id).padStart(5,'0')}`, items, total:items.reduce((s,x)=>s+x.subtotal,0), status:'pending', source:'whatsapp', createdAt:new Date().toISOString() }
+        const grossTotal=items.reduce((s,x)=>s+x.subtotal,0)
+        const discountType=order.discountType||'none'; const discountValue=Number(order.discountValue)||0
+        const discountAmount=discountType==='percent'?Math.min(grossTotal,grossTotal*Math.min(100,discountValue)/100):discountType==='amount'?Math.min(grossTotal,discountValue):0
+        created = { ...order, id, publicCode:`PED-${String(id).padStart(5,'0')}`, items, grossTotal, discountType, discountValue, discountAmount, total:grossTotal-discountAmount, status:'pending', paymentStatus:order.paymentStatus||'pending', paymentProvider:order.paymentMethod==='mercadopago'?'mercadopago':null, paymentExternalId:null, source:'web_checkout', createdAt:new Date().toISOString() }
         return { ...d, orders:[created, ...orders] }
       })
       setCart([])
@@ -209,6 +212,10 @@ export function AppDataProvider({ children }) {
 
     async updateOrder(id, patch) {
       await commit(d => ({ ...d, orders:(d.orders || []).map(x => x.id === id ? { ...x, ...patch, updatedAt:new Date().toISOString() } : x) }))
+    },
+
+    async simulatePayment(id, status='approved') {
+      await commit(d => ({ ...d, orders:(d.orders||[]).map(x => x.id===id ? { ...x, paymentStatus:status, paymentExternalId:x.paymentExternalId||`MP-DEMO-${x.id}`, paymentUpdatedAt:new Date().toISOString(), updatedAt:new Date().toISOString() } : x) }))
     },
 
     async confirmSale(payload) {
