@@ -8,7 +8,7 @@ import {
   Store,
   Truck
 } from 'lucide-react'
-import { Link, Navigate } from 'react-router-dom'
+import { Link, Navigate, useNavigate } from 'react-router-dom'
 import { useAppData } from '../context/AppDataContext'
 import { money } from '../utils/commerce'
 
@@ -21,12 +21,14 @@ const paymentLabels = {
 }
 
 export default function CheckoutPage() {
-  const { data, loading, cart } = useAppData()
+  const { data, loading, cart, createOrder } = useAppData()
+  const navigate = useNavigate()
 
   const [step, setStep] = useState(0)
   const [delivery, setDelivery] = useState('pickup')
   const [payment, setPayment] = useState('mercadopago')
   const [completed, setCompleted] = useState(false)
+  const [submitting, setSubmitting] = useState(false)
   const [form, setForm] = useState({
     name: '',
     phone: '',
@@ -86,7 +88,7 @@ export default function CheckoutPage() {
     // Paso 2: para la demo sólo exigimos los datos mínimos de contacto.
     // El domicilio puede completarse total o parcialmente para mostrar el flujo.
     if (step === 1) {
-      return Boolean(form.name.trim() && form.phone.trim())
+      return Boolean(form.name.trim() && form.phone.trim() && (delivery === 'pickup' || (form.postalCode.trim() && form.street.trim() && form.number.trim() && form.city.trim() && form.province.trim())))
     }
 
     // Paso 3: elegir medio de pago.
@@ -105,10 +107,22 @@ export default function CheckoutPage() {
     setStep(current => Math.max(current - 1, 0))
   }
 
-  const finishDemo = () => {
-    // IMPORTANTE: esta presentación NO registra pedidos, NO modifica stock
-    // y NO persiste datos. Sólo completa el recorrido visual del checkout.
-    setCompleted(true)
+  const finishDemo = async () => {
+    if (submitting) return
+    setSubmitting(true)
+    try {
+      const created = await createOrder({
+        customerName: form.name.trim(), phone: form.phone.trim(), email: form.email.trim(),
+        deliveryType: delivery, paymentMethod: payment,
+        paymentStatus: payment === 'cash' ? 'pending_at_store' : payment === 'transfer' ? 'awaiting_transfer' : 'pending',
+        shippingAddress: delivery === 'shipping' ? { postalCode:form.postalCode, street:form.street, number:form.number, city:form.city, province:form.province, notes:form.notes } : null,
+        notes: form.notes,
+        discountType: cashDiscount > 0 ? 'percent' : 'none', discountValue: cashDiscount > 0 ? 10 : 0,
+        items: items.map(item => ({ productId:item.id, quantity:item.quantity }))
+      })
+      setCompleted(true)
+      navigate(`/seguimiento/${created.trackingCode}`)
+    } finally { setSubmitting(false) }
   }
 
   const shippingAddress = [
@@ -128,11 +142,10 @@ export default function CheckoutPage() {
         </Link>
 
         <div className="checkout-heading">
-          <span className="section-kicker">Demo de compra</span>
+          <span className="section-kicker">Compra online</span>
           <h1>Finalizá tu pedido</h1>
           <p>
-            Recorré el proceso completo de entrega, datos, pago y confirmación.
-            En esta presentación el pedido no se registra ni modifica el stock.
+            Completá tus datos y enviá el pedido. RC Repuestos y Accesorios confirmará disponibilidad y te informará el siguiente paso del pago y la entrega.
           </p>
         </div>
 
@@ -172,23 +185,20 @@ export default function CheckoutPage() {
                   <button
                     type="button"
                     className={delivery === 'shipping' ? 'selected' : ''}
-                    onClick={() => setDelivery('shipping')}
+                    onClick={() => { setDelivery('shipping'); setPayment('mercadopago') }}
                   >
                     <Truck />
                     <strong>Envío a domicilio</strong>
                     <span>
-                      Cargá el domicilio para mostrar cómo quedará el checkout final.
+                      Ingresá el domicilio donde querés recibir el pedido.
                     </span>
                     <small>Costo de envío a coordinar</small>
                   </button>
                 </div>
 
                 <div className="payment-demo-note">
-                  <strong>Envío flexible</strong>
-                  <span>
-                    El costo no bloquea la compra. En la versión final podrá calcularse
-                    o coordinarse según distancia, tamaño y características del pedido.
-                  </span>
+                  <strong>Costo de envío a coordinar</strong>
+                  <span>El sistema registra tu dirección. El valor del envío se acuerda directamente con el vendedor y no está incluido en el total de productos.</span>
                 </div>
               </>
             )}
@@ -283,13 +293,7 @@ export default function CheckoutPage() {
                   </label>
                 </div>
 
-                <div className="payment-demo-note">
-                  <strong>Presentación comercial</strong>
-                  <span>
-                    Sólo nombre y WhatsApp son obligatorios para avanzar en esta demo.
-                    Los demás campos sirven para mostrar el alcance del checkout final.
-                  </span>
-                </div>
+
               </>
             )}
 
@@ -312,7 +316,7 @@ export default function CheckoutPage() {
                     <b>Precio publicado</b>
                   </button>
 
-                  <button
+                  {delivery === 'pickup' && <button
                     type="button"
                     className={payment === 'cash' ? 'selected' : ''}
                     onClick={() => setPayment('cash')}
@@ -329,9 +333,9 @@ export default function CheckoutPage() {
                     {delivery === 'pickup' && (
                       <b className="discount-badge">10% OFF</b>
                     )}
-                  </button>
+                  </button>}
 
-                  <button
+                  {delivery === 'pickup' && <button
                     type="button"
                     className={payment === 'transfer' ? 'selected' : ''}
                     onClick={() => setPayment('transfer')}
@@ -340,22 +344,16 @@ export default function CheckoutPage() {
                     <div>
                       <strong>Transferencia</strong>
                       <span>
-                        Coordinamos los datos y la confirmación con el comercio.
+                        Al confirmar disponibilidad te mostraremos los datos bancarios para realizar el pago y enviar el comprobante.
                       </span>
                     </div>
                     {delivery === 'pickup' && (
                       <b className="discount-badge">10% OFF</b>
                     )}
-                  </button>
+                  </button>}
                 </div>
 
-                <div className="payment-demo-note">
-                  <strong>Demo de medios de pago</strong>
-                  <span>
-                    Ninguna opción realiza un cobro real. En producción Mercado Pago
-                    utilizará Checkout Pro y el backend validará el estado del pago.
-                  </span>
-                </div>
+
               </>
             )}
 
@@ -384,7 +382,7 @@ export default function CheckoutPage() {
                       <b>{paymentLabels[payment]}</b>
                       {cashDiscount
                         ? '10% de descuento aplicado'
-                        : 'Condiciones a confirmar según la modalidad elegida'}
+                        : payment === 'transfer' ? 'Datos bancarios disponibles cuando RC confirme el pedido' : 'Pago según la modalidad elegida'}
                     </span>
                   </div>
                 </div>
@@ -419,19 +417,12 @@ export default function CheckoutPage() {
             {step === 3 && completed && (
               <div className="order-success">
                 <CheckCircle2 size={42} />
-                <span className="section-kicker">Recorrido completado</span>
-                <h2>Así finalizará la compra del cliente.</h2>
+                <span className="section-kicker">Pedido recibido</span>
+                <h2>Recibimos tu pedido.</h2>
                 <p>
-                  La demostración llegó correctamente hasta la confirmación. No se creó
-                  ningún pedido, no se descontó stock y no se realizó ningún cobro.
+                  RC Repuestos y Accesorios revisará disponibilidad y confirmará el pedido antes de avanzar con el pago y la entrega.
                 </p>
-                <div className="payment-demo-note">
-                  <strong>Versión final</strong>
-                  <span>
-                    En producción, desde este punto el sistema podrá registrar el pedido,
-                    coordinar el envío y continuar con el pago o la gestión comercial.
-                  </span>
-                </div>
+
               </div>
             )}
 
@@ -454,8 +445,8 @@ export default function CheckoutPage() {
               )}
 
               {step === 3 && !completed && (
-                <button type="button" className="btn btn-primary" onClick={finishDemo}>
-                  Finalizar demostración
+                <button type="button" className="btn btn-primary" disabled={submitting} onClick={finishDemo}>
+                  {submitting ? 'Registrando…' : 'Confirmar pedido'}
                 </button>
               )}
 

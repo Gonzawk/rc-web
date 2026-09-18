@@ -8,6 +8,7 @@ import StorePage from './pages/StorePage'
 import CartPage from './pages/CartPage'
 import CheckoutPage from './pages/CheckoutPage'
 import OrderStatusPage from './pages/OrderStatusPage'
+import OrderTrackingSearchPage from './pages/OrderTrackingSearchPage'
 import AdminLoginPage from './pages/AdminLoginPage'
 import AdminDashboardPage from './pages/admin/AdminDashboardPage'
 import AdminProductsPage from './pages/admin/AdminProductsPage'
@@ -21,12 +22,13 @@ import AdminPointOfSalePage from './pages/admin/AdminPointOfSalePage'
 import AdminSaleDetailPage from './pages/admin/AdminSaleDetailPage'
 import AdminStatisticsPage from './pages/admin/AdminStatisticsPage'
 import AdminOrdersPage from './pages/admin/AdminOrdersPage'
+import AdminOrderDetailPage from './pages/admin/AdminOrderDetailPage'
 import AdminInventoryPage from './pages/admin/AdminInventoryPage'
 import AdminCashPage from './pages/admin/AdminCashPage'
 import NotFoundPage from './pages/NotFoundPage'
 
 export default function App(){return <ThemeProvider><AppDataProvider><BrowserRouter><Routes>
- <Route element={<PublicLayout/>}><Route path="/" element={<HomePage/>}/><Route path="/catalogo" element={<StorePage/>}/><Route path="/store" element={<StorePage/>}/><Route path="/carrito" element={<CartPage/>}/><Route path="/checkout" element={<CheckoutPage/>}/><Route path="/pedido/:code" element={<OrderStatusPage/>}/><Route path="/admin" element={<AdminLoginPage/>}/></Route>
- <Route path="/admin" element={<AdminLayout/>}><Route path="dashboard" element={<AdminDashboardPage/>}/><Route path="productos" element={<AdminProductsPage/>}/><Route path="inventario" element={<AdminInventoryPage/>}/><Route path="compras" element={<AdminPurchasesPage/>}/><Route path="proveedores" element={<AdminSuppliersPage/>}/><Route path="pedidos" element={<AdminOrdersPage/>}/><Route path="caja" element={<AdminCashPage/>}/><Route path="ventas" element={<AdminSalesPage/>}/><Route path="ventas/nueva" element={<AdminPointOfSalePage/>}/><Route path="ventas/:id" element={<AdminSaleDetailPage/>}/><Route path="estadisticas" element={<AdminStatisticsPage/>}/><Route path="catalogo" element={<AdminCatalogPage/>}/><Route path="contenido-web" element={<AdminWebContentPage/>}/><Route path="configuracion" element={<AdminSettingsPage/>}/></Route>
+ <Route element={<PublicLayout/>}><Route path="/" element={<HomePage/>}/><Route path="/catalogo" element={<StorePage/>}/><Route path="/store" element={<StorePage/>}/><Route path="/carrito" element={<CartPage/>}/><Route path="/checkout" element={<CheckoutPage/>}/><Route path="/seguimiento" element={<OrderTrackingSearchPage/>}/><Route path="/seguimiento/:trackingCode" element={<OrderStatusPage/>}/><Route path="/admin" element={<AdminLoginPage/>}/></Route>
+ <Route path="/admin" element={<AdminLayout/>}><Route path="dashboard" element={<AdminDashboardPage/>}/><Route path="productos" element={<AdminProductsPage/>}/><Route path="inventario" element={<AdminInventoryPage/>}/><Route path="compras" element={<AdminPurchasesPage/>}/><Route path="proveedores" element={<AdminSuppliersPage/>}/><Route path="pedidos" element={<AdminOrdersPage/>}/><Route path="pedidos/:id" element={<AdminOrderDetailPage/>}/><Route path="caja" element={<AdminCashPage/>}/><Route path="ventas" element={<AdminSalesPage/>}/><Route path="ventas/nueva" element={<AdminPointOfSalePage/>}/><Route path="ventas/:id" element={<AdminSaleDetailPage/>}/><Route path="estadisticas" element={<AdminStatisticsPage/>}/><Route path="catalogo" element={<AdminCatalogPage/>}/><Route path="contenido-web" element={<AdminWebContentPage/>}/><Route path="configuracion" element={<AdminSettingsPage/>}/></Route>
  <Route path="*" element={<NotFoundPage/>}/>
  </Routes></BrowserRouter></AppDataProvider></ThemeProvider>}

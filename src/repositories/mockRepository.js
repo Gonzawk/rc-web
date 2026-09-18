@@ -1,6 +1,6 @@
 import seed from '../data/demoData.json'
 
-const KEY = 'rc-repuestos-y-accesorios-demo-data-v10'
+const KEY = 'rc-repuestos-y-accesorios-demo-data-v14'
 const clone = value => JSON.parse(JSON.stringify(value))
 
 export const mockRepository = {

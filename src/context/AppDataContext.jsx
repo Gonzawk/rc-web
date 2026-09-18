@@ -6,6 +6,11 @@ const AppDataContext = createContext(null)
 const nextId = list => Math.max(0, ...(list || []).map(x => Number(x.id) || 0)) + 1
 const CART_KEY = 'rc-repuestos-y-accesorios-cart-v10'
 const clone = value => JSON.parse(JSON.stringify(value))
+const trackingCode = () => {
+  const alphabet='ABCDEFGHJKLMNPQRSTUVWXYZ23456789'
+  const block=n=>Array.from({length:n},()=>alphabet[Math.floor(Math.random()*alphabet.length)]).join('')
+  return `RC-${block(4)}-${block(4)}`
+}
 
 export function AppDataProvider({ children }) {
   const [data, setData] = useState(null)
@@ -200,10 +205,21 @@ export function AppDataProvider({ children }) {
           return { productId:product.id, sku:product.sku, name:product.name, quantity:Number(row.quantity), unitPrice:Number(product.price), subtotal:Number(row.quantity)*Number(product.price) }
         })
         const id = nextId(orders)
-        const grossTotal=items.reduce((s,x)=>s+x.subtotal,0)
-        const discountType=order.discountType||'none'; const discountValue=Number(order.discountValue)||0
-        const discountAmount=discountType==='percent'?Math.min(grossTotal,grossTotal*Math.min(100,discountValue)/100):discountType==='amount'?Math.min(grossTotal,discountValue):0
-        created = { ...order, id, publicCode:`PED-${String(id).padStart(5,'0')}`, items, grossTotal, discountType, discountValue, discountAmount, total:grossTotal-discountAmount, status:'pending', paymentStatus:order.paymentStatus||'pending', paymentProvider:order.paymentMethod==='mercadopago'?'mercadopago':null, paymentExternalId:null, source:'web_checkout', createdAt:new Date().toISOString() }
+        const grossTotal = items.reduce((s,x)=>s+x.subtotal,0)
+        const discountType = order.discountType || 'none'
+        const discountValue = Number(order.discountValue) || 0
+        const discountAmount = discountType === 'percent' ? Math.min(grossTotal,grossTotal*Math.min(100,discountValue)/100) : discountType === 'amount' ? Math.min(grossTotal,discountValue) : 0
+        const createdAt = new Date().toISOString()
+        created = {
+          ...order, id, publicCode:`PED-${String(id).padStart(5,'0')}`, trackingCode:trackingCode(), items, grossTotal,
+          discountType, discountValue, discountAmount, total:grossTotal-discountAmount,
+          shippingCost:null, shippingCostStatus:order.deliveryType === 'shipping' ? 'to_agree' : 'not_applicable',
+          status:'received', paymentStatus:order.paymentStatus || 'pending',
+          paymentProvider:order.paymentMethod === 'mercadopago' ? 'mercadopago' : null,
+          paymentExternalId:null, source:'web_checkout', createdAt,
+          statusHistory:[{ status:'received', at:createdAt, label:'Pedido recibido' }],
+          saleId:null, saleCompletedAt:null
+        }
         return { ...d, orders:[created, ...orders] }
       })
       setCart([])
@@ -211,11 +227,99 @@ export function AppDataProvider({ children }) {
     },
 
     async updateOrder(id, patch) {
-      await commit(d => ({ ...d, orders:(d.orders || []).map(x => x.id === id ? { ...x, ...patch, updatedAt:new Date().toISOString() } : x) }))
+      // Edición general del pedido. Los estados operativos se modifican únicamente
+      // mediante advanceOrder/cancelOrder para conservar el flujo secuencial.
+      const { status: _ignoredStatus, ...safePatch } = patch || {}
+      await commit(d => ({ ...d, orders:(d.orders || []).map(x => x.id === id ? { ...x, ...safePatch, updatedAt:new Date().toISOString() } : x) }))
     },
 
-    async simulatePayment(id, status='approved') {
-      await commit(d => ({ ...d, orders:(d.orders||[]).map(x => x.id===id ? { ...x, paymentStatus:status, paymentExternalId:x.paymentExternalId||`MP-DEMO-${x.id}`, paymentUpdatedAt:new Date().toISOString(), updatedAt:new Date().toISOString() } : x) }))
+    async cancelOrder(id) {
+      let result={ok:false,error:'No se pudo cancelar el pedido.'}
+      await commit(d=>{
+        const order=(d.orders||[]).find(x=>x.id===id)
+        if(!order){result={ok:false,error:'Pedido no encontrado.'};return d}
+        if(order.saleId || !['received','confirmed','awaiting_payment'].includes(order.status)){result={ok:false,error:'El pedido ya no puede cancelarse en su estado actual.'};return d}
+        const now=new Date().toISOString(); result={ok:true}
+        return {...d,orders:(d.orders||[]).map(x=>x.id===id?{...x,status:'cancelled',cancelledAt:now,updatedAt:now,statusHistory:[...(x.statusHistory||[]),{status:'cancelled',at:now,label:'Pedido cancelado'}]}:x)}
+      })
+      return result
+    },
+
+    async advanceOrder(id) {
+      let result = { ok:false, error:'No se pudo actualizar el pedido.' }
+      await commit(d => {
+        const current = (d.orders||[]).find(x=>x.id===id)
+        if (!current) { result={ok:false,error:'Pedido no encontrado.'}; return d }
+        if (['completed','cancelled'].includes(current.status)) { result={ok:false,error:'El pedido ya finalizó.'}; return d }
+        let next = null
+        if (current.status === 'received') next='confirmed'
+        else if (current.status === 'confirmed') next=current.paymentStatus==='approved' ? (current.deliveryType==='shipping'?'pending_shipment':'ready_for_pickup') : 'awaiting_payment'
+        else if (current.status === 'awaiting_payment' && current.paymentStatus === 'approved') next=current.deliveryType==='shipping'?'pending_shipment':'ready_for_pickup'
+        else if (current.status === 'pending_shipment') next='shipped'
+        else if (current.status === 'shipped' || current.status === 'ready_for_pickup') next='completed'
+        if (!next) { result={ok:false,error:current.status==='awaiting_payment'?'El pedido debe acreditar el pago antes de continuar.':'El pedido no tiene una transición disponible en su estado actual.'}; return d }
+        const now=new Date().toISOString()
+        result={ok:true,status:next}
+        return {...d,orders:(d.orders||[]).map(x=>x.id===id?{...x,status:next,updatedAt:now,statusHistory:[...(x.statusHistory||[]),{status:next,at:now,label:next}],...(next==='confirmed'?{confirmedAt:now}:{}),...(next==='shipped'?{shippedAt:now}:{}),...(next==='completed'?{completedAt:now}:{})}:x)}
+      })
+      return result
+    },
+
+    async confirmOrderPayment(orderId, metadata = {}) {
+      let result={ok:false,error:'No se pudo registrar el pago.'}
+      await commit(d=>{
+        const order=(d.orders||[]).find(x=>x.id===orderId)
+        if(!order){result={ok:false,error:'Pedido no encontrado.'};return d}
+        if(order.saleId){result={ok:false,error:'El pago y la venta de este pedido ya fueron registrados.'};return d}
+        if(!['confirmed','awaiting_payment','ready_for_pickup'].includes(order.status)){result={ok:false,error:'El pago no puede confirmarse en el estado actual del pedido.'};return d}
+        for(const row of order.items){
+          const product=d.products.find(x=>x.id===row.productId)
+          if(!product||Number(row.quantity)<=0){result={ok:false,error:'El pedido contiene un producto inválido.'};return d}
+          if(product.trackStock!==false&&Number(product.stock)<Number(row.quantity)){result={ok:false,error:`Stock insuficiente para ${product.name}. Disponible: ${product.stock}.`};return d}
+        }
+
+        const now=new Date().toISOString(); const sales=d.sales||[]; const movements=[...(d.stockMovements||[])]; const number=nextDocumentNumber('VTA',sales)
+        const items=order.items.map(row=>{
+          const product=d.products.find(x=>x.id===row.productId); const quantity=Number(row.quantity); const grossSubtotal=quantity*Number(row.unitPrice); const factor=order.grossTotal?(order.total/order.grossTotal):1; const subtotal=grossSubtotal*factor
+          return {productId:product.id,sku:product.sku,name:product.name,quantity,listUnitPrice:Number(row.unitPrice),unitPrice:quantity?subtotal/quantity:0,unitCost:Number(product.costPrice||0),grossSubtotal,discountAllocated:grossSubtotal-subtotal,subtotal}
+        })
+        const products=d.products.map(product=>{
+          const row=items.find(x=>x.productId===product.id); if(!row||product.trackStock===false)return product
+          const newStock=Number(product.stock)-row.quantity
+          movements.push({id:nextId(movements),productId:product.id,sku:product.sku,productName:product.name,type:'sale',quantity:-row.quantity,stockAfter:newStock,unitCost:row.unitCost,reference:number,note:`Venta originada por ${order.publicCode}`,createdAt:now})
+          return {...product,stock:newStock}
+        })
+        const costTotal=items.reduce((sum,x)=>sum+x.quantity*x.unitCost,0)
+        const sale={id:nextId(sales),number,source:'web_order',orderId:order.id,customerName:order.customerName,phone:order.phone,paymentMethod:order.paymentMethod,notes:order.notes||'',items,grossTotal:order.grossTotal,discountType:order.discountType,discountValue:order.discountValue,discountAmount:order.discountAmount,total:order.total,costTotal,grossProfit:order.total-costTotal,createdAt:now}
+        const cashMovements=[...(d.cashMovements||[])]
+        cashMovements.unshift({id:nextId(cashMovements),direction:'in',category:'product_sale',concept:`Venta ${number} · ${order.publicCode}`,amount:order.total,paymentMethod:order.paymentMethod,reference:number,source:'sale',sourceId:sale.id,notes:order.customerName,createdAt:now})
+        const nextStatus=order.deliveryType==='shipping'?'pending_shipment':'ready_for_pickup'
+        const statusChanged=nextStatus!==order.status
+        const updatedOrder={...order,paymentStatus:'approved',paymentUpdatedAt:now,paymentExternalId:metadata.paymentExternalId||order.paymentExternalId||null,saleId:sale.id,saleNumber:number,saleCompletedAt:now,updatedAt:now,status:nextStatus,statusHistory:statusChanged?[...(order.statusHistory||[]),{status:nextStatus,at:now,label:nextStatus}]:(order.statusHistory||[])}
+        result={ok:true,sale,order:updatedOrder}
+        return {...d,products,stockMovements:movements,sales:[sale,...sales],cashMovements,orders:(d.orders||[]).map(x=>x.id===order.id?updatedOrder:x)}
+      })
+      return result
+    },
+
+    async updatePaymentStatus(id, status) {
+      if(status==='approved') return api.confirmOrderPayment(id)
+      let result={ok:false,error:'No se pudo actualizar el pago.'}
+      await commit(d=>{
+        const order=(d.orders||[]).find(x=>x.id===id)
+        if(!order){result={ok:false,error:'Pedido no encontrado.'};return d}
+        if(order.saleId){result={ok:false,error:'No se puede modificar un pago que ya generó una venta.'};return d}
+        const now=new Date().toISOString();result={ok:true}
+        return {...d,orders:(d.orders||[]).map(x=>x.id===id?{...x,paymentStatus:status,paymentUpdatedAt:now,updatedAt:now}:x)}
+      })
+      return result
+    },
+
+    async completeOrderSale(orderId) {
+      // Compatibilidad con pantallas antiguas: el cierre comercial ocurre al acreditar el pago.
+      const order=(data?.orders||[]).find(x=>x.id===orderId)
+      if(order?.saleId){return {ok:true,sale:(data?.sales||[]).find(x=>x.id===order.saleId)}}
+      return api.confirmOrderPayment(orderId)
     },
 
     async confirmSale(payload) {
@@ -239,27 +343,17 @@ export function AppDataProvider({ children }) {
           return { productId:product.id, sku:product.sku, name:product.name, quantity, listUnitPrice, unitCost, grossSubtotal:quantity*listUnitPrice }
         })
         const grossTotal=rawItems.reduce((s,x)=>s+x.grossSubtotal,0)
-        const discountType=payload.discountType||'none'
-        const discountValue=Math.max(0,Number(payload.discountValue)||0)
+        const discountType=payload.discountType||'none'; const discountValue=Math.max(0,Number(payload.discountValue)||0)
         const discountAmount=discountType==='percent'?Math.min(grossTotal,grossTotal*Math.min(100,discountValue)/100):discountType==='amount'?Math.min(grossTotal,discountValue):0
         const factor=grossTotal?(grossTotal-discountAmount)/grossTotal:1
         const items=rawItems.map(row=>{const subtotal=row.grossSubtotal*factor;return {...row,unitPrice:row.quantity?subtotal/row.quantity:0,discountAllocated:row.grossSubtotal-subtotal,subtotal}})
-        const products = d.products.map(product => {
-          const row = items.find(x => x.productId === product.id)
-          if (!row || product.trackStock === false) return product
-          const newStock = product.stock - row.quantity
-          movements.push({ id:nextId(movements), productId:product.id, sku:product.sku, productName:product.name, type:'sale', quantity:-row.quantity, stockAfter:newStock, unitCost:row.unitCost, reference:number, note:payload.source === 'whatsapp_order' ? 'Pedido confirmado' : 'Venta presencial', createdAt })
-          return { ...product, stock:newStock }
-        })
-        const total = grossTotal-discountAmount
-        const costTotal = items.reduce((s,x)=>s+x.quantity*x.unitCost,0)
-        sale = { id:nextId(sales), number, source:payload.source || 'pos', orderId:payload.orderId || null, customerName:payload.customerName || 'Venta mostrador', phone:payload.phone || '', paymentMethod:payload.paymentMethod || 'Sin especificar', notes:payload.notes || '', items, grossTotal, discountType, discountValue, discountAmount, total, costTotal, grossProfit:total-costTotal, createdAt }
-        const orders = (d.orders || []).map(order => order.id === payload.orderId ? { ...order, status:'confirmed', saleId:sale.id, confirmedAt:createdAt, items:items.map(({unitCost,...x})=>x), grossTotal, discountAmount, total } : order)
-        const cashMovements = [...(d.cashMovements || [])]
-        cashMovements.unshift({ id:nextId(cashMovements), direction:'in', category:'product_sale', concept:`Venta de productos · ${number}`, amount:total, paymentMethod:sale.paymentMethod, reference:number, source:'sale', sourceId:sale.id, notes:sale.customerName, createdAt })
-        return { ...d, products, stockMovements:movements, sales:[sale, ...sales], orders, cashMovements }
+        const products=d.products.map(product=>{const row=items.find(x=>x.productId===product.id);if(!row||product.trackStock===false)return product;const newStock=product.stock-row.quantity;movements.push({id:nextId(movements),productId:product.id,sku:product.sku,productName:product.name,type:'sale',quantity:-row.quantity,stockAfter:newStock,unitCost:row.unitCost,reference:number,note:'Venta presencial',createdAt});return {...product,stock:newStock}})
+        const total=grossTotal-discountAmount;const costTotal=items.reduce((s,x)=>s+x.quantity*x.unitCost,0)
+        sale={id:nextId(sales),number,source:payload.source||'pos',orderId:null,customerName:payload.customerName||'Venta mostrador',phone:payload.phone||'',paymentMethod:payload.paymentMethod||'Sin especificar',notes:payload.notes||'',items,grossTotal,discountType,discountValue,discountAmount,total,costTotal,grossProfit:total-costTotal,createdAt}
+        const cashMovements=[...(d.cashMovements||[])];cashMovements.unshift({id:nextId(cashMovements),direction:'in',category:'product_sale',concept:`Venta de productos · ${number}`,amount:total,paymentMethod:sale.paymentMethod,reference:number,source:'sale',sourceId:sale.id,notes:sale.customerName,createdAt})
+        return {...d,products,stockMovements:movements,sales:[sale,...sales],cashMovements}
       })
-      return error ? { ok:false, error } : { ok:true, sale }
+      return error?{ok:false,error}:{ok:true,sale}
     },
 
     async registerCashMovement(payload) {

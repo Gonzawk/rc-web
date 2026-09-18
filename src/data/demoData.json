@@ -399,7 +399,7 @@
       "category": "Motor",
       "subcategory": "Encendido",
       "price": 12500,
-      "stock": 18,
+      "stock": 16,
       "size": "Unidad",
       "active": true,
       "featured": true,
@@ -599,7 +599,7 @@
       "category": "Transmisión",
       "subcategory": "Kit transmisión",
       "price": 52500,
-      "stock": 9,
+      "stock": 8,
       "size": "Kit",
       "active": true,
       "featured": false,
@@ -952,15 +952,139 @@
   ],
   "orders": [
     {
+      "id": 3,
+      "publicCode": "PED-00003",
+      "customerName": "María López",
+      "phone": "3834559821",
+      "email": "maria.lopez@email.com",
+      "notes": "",
+      "status": "pending_shipment",
+      "source": "web_checkout",
+      "createdAt": "2026-09-17T13:05:00.000Z",
+      "grossTotal": 77500,
+      "discountType": "none",
+      "discountValue": 0,
+      "discountAmount": 0,
+      "total": 77500,
+      "items": [
+        {
+          "productId": 1,
+          "sku": "NGK-CPR8EA9",
+          "name": "Bujía NGK CPR8EA-9",
+          "quantity": 2,
+          "unitPrice": 12500,
+          "subtotal": 25000
+        },
+        {
+          "productId": 6,
+          "sku": "WS-KIT-110",
+          "name": "Kit transmisión 428H Wave 110",
+          "quantity": 1,
+          "unitPrice": 52500,
+          "subtotal": 52500
+        }
+      ],
+      "paymentStatus": "approved",
+      "deliveryType": "shipping",
+      "paymentMethod": "mercadopago",
+      "paymentProvider": "mercadopago",
+      "paymentExternalId": "MP-DEMO-003",
+      "paymentUpdatedAt": "2026-09-17T13:07:00.000Z",
+      "shippingAddress": {
+        "postalCode": "4700",
+        "street": "Av. Güemes",
+        "number": "845",
+        "city": "San Fernando del Valle de Catamarca",
+        "province": "Catamarca",
+        "notes": "Casa con portón negro. Llamar antes de entregar."
+      },
+      "shippingCost": null,
+      "shippingCostStatus": "to_agree",
+      "saleId": 8,
+      "saleCompletedAt": "2026-09-17T13:07:00.000Z",
+      "statusHistory": [
+        {
+          "status": "received",
+          "at": "2026-09-17T13:05:00.000Z",
+          "label": "Pedido recibido"
+        },
+        {
+          "status": "pending_shipment",
+          "at": "2026-09-17T13:07:00.000Z",
+          "label": "pending_shipment"
+        }
+      ],
+      "trackingCode": "RC-7K4M-92QX",
+      "saleNumber": "VTA-000008"
+    },
+    {
+      "id": 2,
+      "publicCode": "PED-00002",
+      "customerName": "Carlos Herrera",
+      "phone": "3834981122",
+      "email": "carlos.h@email.com",
+      "notes": "",
+      "status": "received",
+      "source": "web_checkout",
+      "createdAt": "2026-09-17T11:42:00.000Z",
+      "grossTotal": 91000,
+      "discountType": "percent",
+      "discountValue": 10,
+      "discountAmount": 9100,
+      "total": 81900,
+      "items": [
+        {
+          "productId": 8,
+          "sku": "WS-BAT-YTX5L",
+          "name": "Batería YTX5L-BS 12V",
+          "quantity": 1,
+          "unitPrice": 62000,
+          "subtotal": 62000
+        },
+        {
+          "productId": 5,
+          "sku": "WS-PF-CG150",
+          "name": "Pastillas de freno CG 150",
+          "quantity": 2,
+          "unitPrice": 14500,
+          "subtotal": 29000
+        }
+      ],
+      "paymentStatus": "pending_at_store",
+      "deliveryType": "pickup",
+      "paymentMethod": "cash",
+      "paymentProvider": null,
+      "paymentExternalId": null,
+      "paymentUpdatedAt": null,
+      "shippingAddress": null,
+      "shippingCost": null,
+      "shippingCostStatus": "not_applicable",
+      "saleId": null,
+      "saleCompletedAt": null,
+      "statusHistory": [
+        {
+          "status": "received",
+          "at": "2026-09-17T11:42:00.000Z",
+          "label": "Pedido recibido"
+        }
+      ],
+      "trackingCode": "RC-5H9P-X3LA"
+    },
+    {
       "id": 1,
       "publicCode": "PED-00001",
       "customerName": "Juan Pérez",
       "phone": "3834123456",
-      "notes": "Confirmar si sirve para Titan 150 2018.",
-      "status": "pending",
-      "source": "whatsapp",
-      "createdAt": "2026-09-11T12:10:00.000Z",
-      "total": 39500,
+      "email": "juan.perez@email.com",
+      "notes": "Confirmar compatibilidad antes de preparar.",
+      "status": "received",
+      "source": "web_checkout",
+      "createdAt": "2026-09-17T10:10:00.000Z",
+      "grossTotal": 48000,
+      "discountType": "none",
+      "discountValue": 0,
+      "discountAmount": 0,
+      "total": 48000,
       "items": [
         {
           "productId": 1,
@@ -983,13 +1107,29 @@
           "sku": "WS-PF-CG150",
           "name": "Pastillas de freno CG 150",
           "quantity": 1,
-          "unitPrice": 6000,
-          "subtotal": 6000
+          "unitPrice": 14500,
+          "subtotal": 14500
         }
       ],
       "paymentStatus": "pending",
       "deliveryType": "pickup",
-      "paymentMethod": "mercadopago"
+      "paymentMethod": "mercadopago",
+      "paymentProvider": "mercadopago",
+      "paymentExternalId": null,
+      "paymentUpdatedAt": null,
+      "shippingAddress": null,
+      "shippingCost": null,
+      "shippingCostStatus": "not_applicable",
+      "saleId": null,
+      "saleCompletedAt": null,
+      "statusHistory": [
+        {
+          "status": "received",
+          "at": "2026-09-17T10:10:00.000Z",
+          "label": "Pedido recibido"
+        }
+      ],
+      "trackingCode": "RC-8N4K-2Q7M"
     }
   ],
   "purchases": [
@@ -1075,6 +1215,50 @@
     }
   ],
   "sales": [
+    {
+      "id": 8,
+      "number": "VTA-000008",
+      "source": "web_order",
+      "orderId": 3,
+      "customerName": "María López",
+      "phone": "3834559821",
+      "paymentMethod": "mercadopago",
+      "notes": "",
+      "items": [
+        {
+          "productId": 1,
+          "sku": "NGK-CPR8EA9",
+          "name": "Bujía NGK CPR8EA-9",
+          "quantity": 2,
+          "listUnitPrice": 12500,
+          "unitPrice": 12500.0,
+          "unitCost": 7200,
+          "grossSubtotal": 25000,
+          "discountAllocated": 0.0,
+          "subtotal": 25000.0
+        },
+        {
+          "productId": 6,
+          "sku": "WS-KIT-110",
+          "name": "Kit transmisión 428H Wave 110",
+          "quantity": 1,
+          "listUnitPrice": 52500,
+          "unitPrice": 52500.0,
+          "unitCost": 29800,
+          "grossSubtotal": 52500,
+          "discountAllocated": 0.0,
+          "subtotal": 52500.0
+        }
+      ],
+      "grossTotal": 77500,
+      "discountType": "none",
+      "discountValue": 0,
+      "discountAmount": 0,
+      "total": 77500,
+      "costTotal": 44200,
+      "grossProfit": 33300,
+      "createdAt": "2026-09-17T13:07:00.000Z"
+    },
     {
       "id": 1,
       "number": "VTA-000001",
@@ -1403,9 +1587,48 @@
       "reference": "COMP-000001",
       "note": "Compra a MotoPartes Norte",
       "createdAt": "2026-09-08T15:00:00.000Z"
+    },
+    {
+      "id": 4,
+      "productId": 1,
+      "sku": "NGK-CPR8EA9",
+      "productName": "Bujía NGK CPR8EA-9",
+      "type": "sale",
+      "quantity": -2,
+      "stockAfter": 16,
+      "unitCost": 7200,
+      "reference": "VTA-000008",
+      "note": "Venta originada por PED-00003",
+      "createdAt": "2026-09-17T13:07:00.000Z"
+    },
+    {
+      "id": 5,
+      "productId": 6,
+      "sku": "WS-KIT-110",
+      "productName": "Kit transmisión 428H Wave 110",
+      "type": "sale",
+      "quantity": -1,
+      "stockAfter": 8,
+      "unitCost": 29800,
+      "reference": "VTA-000008",
+      "note": "Venta originada por PED-00003",
+      "createdAt": "2026-09-17T13:07:00.000Z"
     }
   ],
   "cashMovements": [
+    {
+      "id": 11,
+      "direction": "in",
+      "category": "product_sale",
+      "concept": "Venta VTA-000008 · PED-00003",
+      "amount": 77500,
+      "paymentMethod": "mercadopago",
+      "reference": "VTA-000008",
+      "source": "sale",
+      "sourceId": 8,
+      "notes": "María López",
+      "createdAt": "2026-09-17T13:07:00.000Z"
+    },
     {
       "id": 1,
       "direction": "in",

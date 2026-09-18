@@ -26,7 +26,7 @@ export default function PublicHeader(){
       <nav className={`shop-nav ${open?'open':''}`}><div className="container shop-nav-inner">
         <NavLink to="/" end onClick={close}>Inicio</NavLink>
         <button className={`nav-products-button ${mega?'active':''}`} onClick={()=>setMega(v=>!v)} onMouseEnter={()=>window.innerWidth>900&&setMega(true)}>Productos <ChevronDown size={14}/></button>
-        <a href="/#marcas" onClick={close}>Marcas</a><a href="/#motos" onClick={close}>Motos por modelo</a><a href="/#accesorios" onClick={close}>Accesorios</a><a href="/#ofertas" onClick={close}>Ofertas</a><a href={wa} target="_blank" rel="noreferrer">Contacto</a><a href={wa} target="_blank" rel="noreferrer" className="wholesale-nav">Mayoristas</a><a href="/#como-comprar" onClick={close}>¿Cómo comprar?</a>
+        <a href="/#marcas" onClick={close}>Marcas</a><a href="/#motos" onClick={close}>Motos por modelo</a><a href="/#accesorios" onClick={close}>Accesorios</a><a href="/#ofertas" onClick={close}>Ofertas</a><NavLink to="/seguimiento" onClick={close}>Seguimiento</NavLink><a href={wa} target="_blank" rel="noreferrer">Contacto</a><a href={wa} target="_blank" rel="noreferrer" className="wholesale-nav">Mayoristas</a><a href="/#como-comprar" onClick={close}>¿Cómo comprar?</a>
       </div></nav>
       {mega&&<div onMouseLeave={()=>window.innerWidth>900&&setMega(false)}><ProductMegaMenu onNavigate={close}/></div>}
     </header>
