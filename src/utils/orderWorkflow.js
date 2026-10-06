@@ -28,7 +28,7 @@ export const isFinalOrderStatus = status => ['completed', 'cancelled'].includes(
 
 export const nextOperationalStatus = order => {
   if (!order || isFinalOrderStatus(order.status)) return null
-  if (order.status === 'received') return 'confirmed'
+  if (order.status === 'received') return order.deliveryType === 'pickup' && order.paymentMethod === 'cash' ? 'ready_for_pickup' : 'confirmed'
   if (order.status === 'confirmed') return order.paymentStatus === 'approved'
     ? (order.deliveryType === 'shipping' ? 'pending_shipment' : 'ready_for_pickup')
     : 'awaiting_payment'
@@ -36,11 +36,12 @@ export const nextOperationalStatus = order => {
     ? (order.deliveryType === 'shipping' ? 'pending_shipment' : 'ready_for_pickup')
     : null
   if (order.status === 'pending_shipment') return 'shipped'
-  if (order.status === 'shipped' || order.status === 'ready_for_pickup') return 'completed'
+  if (order.status === 'shipped') return 'completed'
+  if (order.status === 'ready_for_pickup') return order.paymentStatus === 'approved' ? 'completed' : null
   return null
 }
 
-export const canCancelOrder = order => Boolean(order && !order.saleId && ['received', 'confirmed', 'awaiting_payment'].includes(order.status))
+export const canCancelOrder = order => Boolean(order && !order.saleId && ['received', 'confirmed', 'awaiting_payment', 'ready_for_pickup'].includes(order.status))
 
 export const canConfirmPayment = order => {
   if (!order || order.saleId || order.paymentStatus === 'approved' || isFinalOrderStatus(order.status)) return false

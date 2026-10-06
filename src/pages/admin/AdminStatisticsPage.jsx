@@ -1,18 +1,21 @@
-import { useMemo, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { Boxes, CircleDollarSign, PackagePlus, ShoppingBag, Sparkles, TrendingUp } from 'lucide-react'
-import { useAppData } from '../../context/AppDataContext'
-import { buildCommercialAnalytics } from '../../utils/analytics'
+
 import { money, shortDate } from '../../utils/commerce'
+import { operationsRepository as ops } from '../../repositories/operationsRepository'
 
 const coverage = value => value == null ? 'Sin rotación' : value < 1 ? '< 1 día' : `${Math.round(value)} días`
 const pct = value => `${Number(value || 0).toFixed(1)}%`
 
 export default function AdminStatisticsPage(){
-  const { data, loading } = useAppData()
-  const [days, setDays] = useState(30)
-  const analytics = useMemo(() => data ? buildCommercialAnalytics(data, days) : null, [data, days])
+  const [days,setDays]=useState(30)
+  const [analytics,setAnalytics]=useState(null)
+  const [loading,setLoading]=useState(true)
+  const [error,setError]=useState('')
+  useEffect(()=>{let live=true;setLoading(true);setError('');ops.commercialStatistics(days).then(x=>{if(live)setAnalytics(x)}).catch(e=>{if(live)setError(e.message||'No se pudieron cargar las estadísticas.')}).finally(()=>live&&setLoading(false));return()=>{live=false}},[days])
 
-  if (loading || !analytics) return <div className="screen-loader">Calculando estadísticas…</div>
+  if (loading) return <div className="screen-loader">Calculando estadísticas…</div>
+  if (error || !analytics) return <section className="admin-panel empty-commercial-state"><TrendingUp/><h2>No pudimos cargar las estadísticas</h2><p>{error}</p></section>
 
   const top = analytics.topProfit
   const reinvest = analytics.topReinvestment
@@ -60,8 +63,8 @@ export default function AdminStatisticsPage(){
 
     <div className="simple-commercial-kpis">
       <article><CircleDollarSign/><div><span>Ganancia total</span><strong>{money(analytics.grossProfit)}</strong><small>Después del costo de los productos vendidos</small></div></article>
-      <article><ShoppingBag/><div><span>Facturación</span><strong>{money(analytics.totalRevenue)}</strong><small>{analytics.sales.length} ventas · {analytics.unitsSold} unidades</small></div></article>
-      <article><PackagePlus/><div><span>Compras registradas</span><strong>{money(analytics.purchaseInvestment)}</strong><small>{analytics.purchases.length} compras de stock en el período</small></div></article>
+      <article><ShoppingBag/><div><span>Facturación</span><strong>{money(analytics.totalRevenue)}</strong><small>{analytics.saleCount} ventas · {analytics.unitsSold} unidades</small></div></article>
+      <article><PackagePlus/><div><span>Compras registradas</span><strong>{money(analytics.purchaseInvestment)}</strong><small>{analytics.purchaseCount} compras de stock en el período</small></div></article>
     </div>
 
     <section className="admin-panel profit-ranking-panel">
@@ -93,10 +96,10 @@ export default function AdminStatisticsPage(){
     </section>
 
     <section className="admin-panel commercial-context-panel">
-      <div><PackagePlus/><div><strong>Datos históricos para la presentación</strong><p>La base de presentación incluye compras y ventas distribuidas entre mayo y septiembre, con costos que cambian en el tiempo. Por eso el producto ganador puede cambiar al elegir 7, 30, 90 días o todo el historial.</p></div></div>
-      <div className="commercial-context-stats"><span><b>{analytics.purchases.length}</b> compras</span><span><b>{analytics.sales.length}</b> ventas</span><span><b>{ranking.length}</b> productos con movimiento</span></div>
+      <div><PackagePlus/><div><strong>Datos comerciales reales</strong><p>Los indicadores se calculan en el backend sobre ventas y compras persistidas, usando el costo histórico guardado en cada detalle de venta.</p></div></div>
+      <div className="commercial-context-stats"><span><b>{analytics.purchaseCount}</b> compras</span><span><b>{analytics.saleCount}</b> ventas</span><span><b>{ranking.length}</b> productos con movimiento</span></div>
     </section>
 
-    <div className="analytics-note"><strong>Cómo usar esta pantalla</strong><p>Primero mirá qué producto dejó más <b>ganancia total</b>. Después revisá su <b>stock y cobertura</b>. Si además de ser rentable tiene poca cobertura, es un buen candidato para reponer. La recomendación es orientativa: en el backend la calcularemos con datos reales y reglas de negocio configurables.</p></div>
+    <div className="analytics-note"><strong>Cómo usar esta pantalla</strong><p>Primero mirá qué producto dejó más <b>ganancia total</b>. Después revisá su <b>stock y cobertura</b>. Si además de ser rentable tiene poca cobertura, es un buen candidato para reponer. La recomendación de reposición es orientativa; los importes, unidades, costos históricos y ganancias ya provienen de datos reales calculados por el backend.</p></div>
   </>
 }

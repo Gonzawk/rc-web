@@ -1,0 +1,17 @@
+import {useEffect,useState} from 'react'
+import {ArrowLeft,CalendarDays,CircleDollarSign,PackageCheck,ReceiptText,Truck} from 'lucide-react'
+import {Link,useParams} from 'react-router-dom'
+import {operationsRepository as ops} from '../../repositories/operationsRepository'
+import {dateTime,money} from '../../utils/commerce'
+
+export default function AdminPurchaseDetailPage(){
+ const{id}=useParams();const[state,setState]=useState({loading:true,error:'',purchase:null})
+ useEffect(()=>{let alive=true;ops.purchaseById(id).then(x=>alive&&setState({loading:false,error:'',purchase:ops.mapPurchase(x)})).catch(e=>alive&&setState({loading:false,error:e.message||'No se pudo cargar la compra.',purchase:null}));return()=>{alive=false}},[id])
+ if(state.loading)return <div className="screen-loader">Cargando compra…</div>
+ if(!state.purchase)return <div className="admin-panel empty-agenda"><h2>Compra no encontrada</h2><p>{state.error}</p><Link className="btn btn-secondary" to="/admin/compras/historial">Volver</Link></div>
+ const x=state.purchase
+ return <><div className="admin-page-header compact-page-header"><div><Link className="back-link" to="/admin/compras/historial"><ArrowLeft size={15}/> Volver al historial</Link><span className="section-kicker">Detalle de compra</span><h1>{x.number}</h1><p>Registro histórico inmutable de los costos y referencias recibidas.</p></div><span className="status-pill success">Confirmada</span></div>
+ <div className="purchase-detail-kpis"><article><CircleDollarSign/><span>Total</span><strong>{money(x.totalCost)}</strong></article><article><PackageCheck/><span>Referencias</span><strong>{x.items.length}</strong></article><article><CalendarDays/><span>Fecha</span><strong>{dateTime(x.createdAt)}</strong></article></div>
+ <div className="detail-two-columns purchase-detail-grid"><section className="admin-panel"><div className="detail-section-title"><ReceiptText/><div><h2>Productos comprados</h2><p>Los valores corresponden al momento en que se confirmó esta compra.</p></div></div><div className="purchase-detail-items">{x.items.map((item,index)=><article key={`${item.variantId}-${index}`}><div className="purchase-detail-product"><strong>{item.name}</strong><span>{item.variant||'Referencia única'} · SKU {item.sku}</span></div><div><small>Cantidad</small><strong>{item.quantity}</strong></div><div><small>Costo lista</small><strong>{money(item.listUnitCost)}</strong></div><div><small>Costo neto</small><strong>{money(item.unitCost)}</strong></div><div><small>Subtotal</small><strong>{money(item.subtotal)}</strong></div></article>)}</div><div className="detail-totals-v12"><span>Subtotal <b>{money(x.subtotal)}</b></span>{x.discountAmount>0&&<span>Descuento <b>- {money(x.discountAmount)}</b></span>}<strong>Total <b>{money(x.totalCost)}</b></strong></div></section>
+ <aside className="admin-panel sale-meta"><div className="detail-section-title"><Truck/><div><h2>Datos de la operación</h2><p>Proveedor y comprobante asociados.</p></div></div><dl><div><dt>Proveedor</dt><dd>{x.supplierName}</dd></div><div><dt>Comprobante</dt><dd>{x.invoiceNumber||'Sin comprobante'}</dd></div><div><dt>Medio de pago</dt><dd>{x.paymentMethod}</dd></div><div><dt>Fecha registrada</dt><dd>{dateTime(x.createdAt)}</dd></div>{x.notes&&<div><dt>Observaciones</dt><dd>{x.notes}</dd></div>}</dl></aside></div></>
+}

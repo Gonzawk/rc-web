@@ -47,11 +47,12 @@ export default function CheckoutPage() {
     return cart
       .map(row => {
         const product = data.products.find(x => x.id === row.productId)
-        return product
+        const variant = product?.variants?.find(v=>v.id===row.variantId)||product?.variants?.find(v=>v.isDefault)
+        return product&&variant
           ? {
-              ...product,
+              ...product, variant, price:variant.price,
               quantity: row.quantity,
-              subtotal: product.price * row.quantity
+              subtotal: variant.price * row.quantity
             }
           : null
       })
@@ -68,12 +69,8 @@ export default function CheckoutPage() {
 
   const gross = items.reduce((sum, item) => sum + item.subtotal, 0)
 
-  // La demo conserva la política comercial existente:
-  // 10% OFF sólo para retiro + efectivo/transferencia.
-  const cashDiscount =
-    delivery === 'pickup' && ['cash', 'transfer'].includes(payment)
-      ? gross * 0.1
-      : 0
+  // El backend es la fuente de verdad comercial. No aplicamos descuentos implícitos en checkout.
+  const cashDiscount = 0
 
   const total = gross - cashDiscount
 
@@ -117,8 +114,8 @@ export default function CheckoutPage() {
         paymentStatus: payment === 'cash' ? 'pending_at_store' : payment === 'transfer' ? 'awaiting_transfer' : 'pending',
         shippingAddress: delivery === 'shipping' ? { postalCode:form.postalCode, street:form.street, number:form.number, city:form.city, province:form.province, notes:form.notes } : null,
         notes: form.notes,
-        discountType: cashDiscount > 0 ? 'percent' : 'none', discountValue: cashDiscount > 0 ? 10 : 0,
-        items: items.map(item => ({ productId:item.id, quantity:item.quantity }))
+        discountType: 'none', discountValue: 0,
+        items: items.map(item => ({ productId:item.id, variantId:item.variant.id, quantity:item.quantity }))
       })
       setCompleted(true)
       navigate(`/seguimiento/${created.trackingCode}`)

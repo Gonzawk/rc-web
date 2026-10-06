@@ -1,0 +1,16 @@
+import {useEffect,useState} from 'react'
+import {ChevronLeft,ChevronRight,Eye,PackagePlus,ReceiptText} from 'lucide-react'
+import {Link} from 'react-router-dom'
+import {operationsRepository as ops} from '../../repositories/operationsRepository'
+import {dateTime,money} from '../../utils/commerce'
+
+export default function AdminPurchaseHistoryPage(){
+ const[page,setPage]=useState(1);const[state,setState]=useState({loading:true,error:'',items:[],total:0,totalPages:1})
+ useEffect(()=>{let alive=true;setState(s=>({...s,loading:true,error:''}));ops.purchaseHistory(page,5).then(r=>{if(alive)setState({loading:false,error:'',items:(r.items||[]).map(ops.mapPurchase),total:Number(r.total||0),totalPages:Math.max(1,Number(r.totalPages||1))})}).catch(e=>alive&&setState(s=>({...s,loading:false,error:e.message||'No se pudo cargar el historial.'})));return()=>{alive=false}},[page])
+ return <><div className="admin-page-header purchase-page-head"><div><span className="section-kicker">Abastecimiento</span><h1>Historial de compras</h1><p>Registro cronológico de compras confirmadas. Las operaciones más recientes aparecen primero.</p></div><Link className="btn btn-primary" to="/admin/compras"><PackagePlus size={16}/> Nueva compra</Link></div>
+ {state.error&&<div className="notice-error">{state.error}</div>}
+ <div className="admin-panel purchase-history-panel"><div className="purchase-history-summary"><div><ReceiptText size={20}/><span><strong>{state.total}</strong><small>compras registradas</small></span></div><small>Página {page} de {state.totalPages}</small></div>
+ {state.loading?<div className="screen-loader compact">Cargando historial…</div>:state.items.length===0?<div className="empty-agenda"><h2>Todavía no hay compras</h2><p>Cuando confirmes la primera operación aparecerá acá.</p></div>:<div className="admin-table-wrap"><table className="admin-table purchase-history-table"><thead><tr><th>Compra</th><th>Proveedor</th><th>Comprobante</th><th>Fecha</th><th>Items</th><th>Total</th><th></th></tr></thead><tbody>{state.items.map(x=><tr key={x.id}><td data-label="Compra"><strong>{x.number}</strong></td><td data-label="Proveedor">{x.supplierName}</td><td data-label="Comprobante">{x.invoiceNumber||'—'}</td><td data-label="Fecha">{dateTime(x.createdAt)}</td><td data-label="Items">{x.itemCount}</td><td data-label="Total"><strong>{money(x.totalCost)}</strong></td><td data-label="Detalle"><Link className="table-icon-link" to={`/admin/compras/${x.id}`} title="Ver detalle"><Eye size={17}/></Link></td></tr>)}</tbody></table></div>}
+ <div className="purchase-pagination"><button type="button" disabled={page<=1||state.loading} onClick={()=>setPage(p=>Math.max(1,p-1))}><ChevronLeft size={16}/> Anterior</button><span>{Array.from({length:state.totalPages},(_,i)=>i+1).filter(n=>n===1||n===state.totalPages||Math.abs(n-page)<=1).map((n,i,a)=><span key={n}>{i>0&&n-a[i-1]>1&&<i>…</i>}<button className={n===page?'active':''} onClick={()=>setPage(n)}>{n}</button></span>)}</span><button type="button" disabled={page>=state.totalPages||state.loading} onClick={()=>setPage(p=>Math.min(state.totalPages,p+1))}>Siguiente <ChevronRight size={16}/></button></div>
+ </div></>
+}
