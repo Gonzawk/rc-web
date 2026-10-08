@@ -69,8 +69,13 @@ export default function CheckoutPage() {
 
   const gross = items.reduce((sum, item) => sum + item.subtotal, 0)
 
-  // El backend es la fuente de verdad comercial. No aplicamos descuentos implícitos en checkout.
-  const cashDiscount = 0
+  // Vista previa: el backend recalcula y persiste los importes definitivos.
+  const cashDiscount = ['cash', 'transfer'].includes(payment)
+    ? items.reduce((sum, item) => {
+        const onOffer = Boolean(item.offerActive && item.variant.offerActive)
+        return sum + (onOffer ? 0 : Math.round(item.subtotal * 20) / 100)
+      }, 0)
+    : 0
 
   const total = gross - cashDiscount
 
@@ -89,7 +94,7 @@ export default function CheckoutPage() {
     }
 
     // Paso 3: elegir medio de pago.
-    if (step === 2) return Boolean(payment)
+    if (step === 2) return Boolean(payment && (delivery === 'pickup' || payment !== 'cash'))
 
     return true
   }
@@ -105,7 +110,7 @@ export default function CheckoutPage() {
   }
 
   const finishDemo = async () => {
-    if (submitting) return
+    if (submitting || (delivery === 'shipping' && payment === 'cash')) return
     setSubmitting(true)
     try {
       const created = await createOrder({
@@ -327,12 +332,10 @@ export default function CheckoutPage() {
                           : 'Forma de pago a coordinar con el comercio.'}
                       </span>
                     </div>
-                    {delivery === 'pickup' && (
-                      <b className="discount-badge">10% OFF</b>
-                    )}
+                    <b className="discount-badge">20% OFF excepto ofertas</b>
                   </button>}
 
-                  {delivery === 'pickup' && <button
+                  <button
                     type="button"
                     className={payment === 'transfer' ? 'selected' : ''}
                     onClick={() => setPayment('transfer')}
@@ -344,10 +347,8 @@ export default function CheckoutPage() {
                         Al confirmar disponibilidad te mostraremos los datos bancarios para realizar el pago y enviar el comprobante.
                       </span>
                     </div>
-                    {delivery === 'pickup' && (
-                      <b className="discount-badge">10% OFF</b>
-                    )}
-                  </button>}
+                    <b className="discount-badge">20% OFF excepto ofertas</b>
+                  </button>
                 </div>
 
 
@@ -378,7 +379,7 @@ export default function CheckoutPage() {
                     <span>
                       <b>{paymentLabels[payment]}</b>
                       {cashDiscount
-                        ? '10% de descuento aplicado'
+                        ? '20% de descuento aplicado sobre productos sin oferta'
                         : payment === 'transfer' ? 'Datos bancarios disponibles cuando RC confirme el pedido' : 'Pago según la modalidad elegida'}
                     </span>
                   </div>
@@ -477,7 +478,7 @@ export default function CheckoutPage() {
             {cashDiscount > 0 && (
               <div className="checkout-discount">
                 <span>
-                  Descuento {payment === 'cash' ? 'efectivo' : 'transferencia'} (10%)
+                  Descuento {payment === 'cash' ? 'efectivo' : 'transferencia'} (20% excepto ofertas)
                 </span>
                 <b>- {money(cashDiscount)}</b>
               </div>
@@ -496,7 +497,7 @@ export default function CheckoutPage() {
             <small>
               {delivery === 'shipping'
                 ? 'El costo de envío no está incluido y se coordina posteriormente según destino y características del pedido.'
-                : 'Los precios publicados corresponden al precio general/tarjeta. Efectivo y transferencia al retirar obtienen 10% OFF.'}
+                : 'Los precios publicados corresponden al precio general/tarjeta. Efectivo al retirar y transferencia en ambas modalidades obtienen 20% OFF en productos sin oferta.'}
             </small>
           </aside>
         </div>

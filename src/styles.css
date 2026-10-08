@@ -552,3 +552,12 @@ html[data-theme='dark'] .offer-old-price{color:#9299a3}
     font-size: 18px;
   }
 }
+
+/* v28.1.1 — beneficio de pago, exclusivo de productos sin oferta */
+.rc-payment-discount-note {
+  margin: 8px 0 12px;
+  color: #14734b;
+  font-size: 0.78rem;
+  font-weight: 700;
+  line-height: 1.45;
+}
