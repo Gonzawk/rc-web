@@ -8,7 +8,8 @@ const direction={1:'in',2:'out'}
 const defaultVariant=p=>(p.variants||[]).find(v=>v.isDefault)||(p.variants||[])[0]
 const payApi=v=>String(v||'').toLowerCase().includes('transfer')?'Transferencia':String(v||'').toLowerCase().includes('mercado')?'MercadoPago':String(v||'').toLowerCase().includes('tarjeta')?'Tarjeta':'Efectivo'
 export const operationsRepository={
- saveBrand:x=>apiFetch('/api/admin/maestros/marcas',{method:'POST',body:JSON.stringify({id:x.id||null,nombre:x.name,margenPredeterminado:Number(x.defaultMarkupPercent||0),activa:x.active!==false,logoCloudflareImageId:x.logoCloudflareImageId||null,quitarLogo:x.removeLogo===true})}),
+ saveBrand:x=>apiFetch('/api/admin/maestros/marcas',{method:'POST',body:JSON.stringify({id:x.id||null,nombre:x.name,margenPredeterminado:Number(x.defaultMarkupPercent||0),activa:x.active!==false,visibleEnPasarela:x.visibleInCarousel!==false,logoCloudflareImageId:x.logoCloudflareImageId||null,quitarLogo:x.removeLogo===true})}),
+ brandVisibility:(id,visible)=>apiFetch(`/api/admin/maestros/marcas/${id}/visibilidad`,{method:'PATCH',body:JSON.stringify(visible)}),
  brandState:(id,active)=>apiFetch(`/api/admin/maestros/marcas/${id}/estado`,{method:'PATCH',body:JSON.stringify(active)}),
  saveCategory:x=>apiFetch('/api/admin/maestros/categorias',{method:'POST',body:JSON.stringify({id:x.id||null,nombre:x.name,categoriaPadreId:x.parentId||null,orden:Number(x.order||0),activa:x.active!==false})}),
  categoryState:(id,active)=>apiFetch(`/api/admin/maestros/categorias/${id}/estado`,{method:'PATCH',body:JSON.stringify(active)}),

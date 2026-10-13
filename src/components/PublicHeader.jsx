@@ -9,14 +9,15 @@ import { useTheme } from '../context/ThemeContext'
 export default function PublicHeader(){
   const [open,setOpen]=useState(false)
   const [mega,setMega]=useState(false)
+  const [brandsOpen,setBrandsOpen]=useState(false)
   const [search,setSearch]=useState('')
   const navigate=useNavigate()
   const {data,cartCount}=useAppData()
   const {theme,toggleTheme}=useTheme()
   if(!data)return null
-  const submit=e=>{e.preventDefault();const q=search.trim();navigate(q?`/catalogo?q=${encodeURIComponent(q)}`:'/catalogo');setOpen(false);setMega(false)}
+  const submit=e=>{e.preventDefault();const q=search.trim();navigate(q?`/catalogo?q=${encodeURIComponent(q)}`:'/catalogo');setOpen(false);setMega(false);setBrandsOpen(false)}
   const wa=`https://wa.me/${data.settings.whatsapp}`
-  const close=()=>{setOpen(false);setMega(false)}
+  const close=()=>{setOpen(false);setMega(false);setBrandsOpen(false)}
   return <>
     <div className="shop-utility"><div className="container shop-utility-inner"><div className="utility-left"><span>🚚 Envíos a todo el país</span><span>💳 Consultá medios de pago</span><span>🏷️ Venta por mayor y menor</span></div><a href={wa} target="_blank" rel="noreferrer"><MessageCircle size={14}/> Atención por <b>WhatsApp</b></a></div></div>
     <header className="shop-header">
@@ -28,9 +29,9 @@ export default function PublicHeader(){
       <nav className={`shop-nav ${open?'open':''}`}><div className="container shop-nav-inner">
         <NavLink to="/" end onClick={close}>Inicio</NavLink>
         <button className={`nav-products-button ${mega?'active':''}`} onClick={()=>setMega(v=>!v)} onMouseEnter={()=>window.innerWidth>900&&setMega(true)}>Productos <ChevronDown size={14}/></button>
-        <a href="/#marcas" onClick={close}>Marcas</a><a href="/#motos" onClick={close}>Motos por modelo</a><a href="/#accesorios" onClick={close}>Accesorios</a><NavLink to="/seguimiento" onClick={close}>Seguimiento</NavLink><a href={wa} target="_blank" rel="noreferrer">Contacto</a><a href={wa} target="_blank" rel="noreferrer" className="wholesale-nav">Mayoristas</a><a href="/#como-comprar" onClick={close}>¿Cómo comprar?</a>
+        <div className="rc-nav-brands"><button type="button" className="nav-products-button" aria-expanded={brandsOpen} onClick={()=>{setBrandsOpen(v=>!v);setMega(false)}}>Marcas <ChevronDown size={14}/></button>{brandsOpen&&<div className="rc-nav-brand-list">{data.brands.filter(x=>x.active).map(b=><Link key={b.id} to={`/catalogo?marca=${encodeURIComponent(b.name)}`} onClick={close}>{b.name}</Link>)}</div>}</div><a href="/#motos" onClick={close}>Motos por modelo</a><a href="/#accesorios" onClick={close}>Accesorios</a><NavLink to="/seguimiento" onClick={close}>Seguimiento</NavLink><a href={wa} target="_blank" rel="noreferrer">Contacto</a><a href={wa} target="_blank" rel="noreferrer" className="wholesale-nav">Mayoristas</a><a href="/#como-comprar" onClick={close}>¿Cómo comprar?</a>
       </div></nav>
-      {mega&&<div onMouseLeave={()=>window.innerWidth>900&&setMega(false)}><ProductMegaMenu onNavigate={close}/></div>}
+      {mega&&<div onMouseLeave={() => { if (window.innerWidth > 900) { setMega(false); setBrandsOpen(false) } }}><ProductMegaMenu onNavigate={close}/></div>}
     </header>
   </>
 }

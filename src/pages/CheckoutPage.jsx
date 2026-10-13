@@ -21,7 +21,7 @@ const paymentLabels = {
 }
 
 export default function CheckoutPage() {
-  const { data, loading, cart, createOrder } = useAppData()
+  const { data, loading, cart, cartHydrating, createOrder } = useAppData()
   const navigate = useNavigate()
 
   const [step, setStep] = useState(0)
@@ -59,7 +59,7 @@ export default function CheckoutPage() {
       .filter(Boolean)
   }, [data, cart])
 
-  if (loading) {
+  if (loading || cartHydrating) {
     return <div className="screen-loader">Preparando checkout…</div>
   }
 
@@ -73,11 +73,11 @@ export default function CheckoutPage() {
   const cashDiscount = ['cash', 'transfer'].includes(payment)
     ? items.reduce((sum, item) => {
         const onOffer = Boolean(item.offerActive && item.variant.offerActive)
-        return sum + (onOffer ? 0 : Math.round(item.subtotal * 20) / 100)
+        return sum + (onOffer ? 0 : Math.round((item.subtotal + Number.EPSILON) * 0.20 * 100) / 100)
       }, 0)
     : 0
 
-  const total = gross - cashDiscount
+  const total = Math.round((gross - cashDiscount + Number.EPSILON) * 100) / 100
 
   const updateField = (field, value) => {
     setForm(current => ({ ...current, [field]: value }))
