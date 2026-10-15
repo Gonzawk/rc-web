@@ -11,6 +11,7 @@ import {
 import { Link, Navigate, useNavigate } from 'react-router-dom'
 import { useAppData } from '../context/AppDataContext'
 import { money } from '../utils/commerce'
+import { operationsRepository as ops } from '../repositories/operationsRepository'
 
 const steps = ['Entrega', 'Datos', 'Pago', 'Confirmación']
 
@@ -29,6 +30,8 @@ export default function CheckoutPage() {
   const [payment, setPayment] = useState('mercadopago')
   const [completed, setCompleted] = useState(false)
   const [submitting, setSubmitting] = useState(false)
+  const [checkoutError, setCheckoutError] = useState('')
+  const [pendingPaymentCode, setPendingPaymentCode] = useState('')
   const [form, setForm] = useState({
     name: '',
     phone: '',
@@ -112,7 +115,14 @@ export default function CheckoutPage() {
   const finishDemo = async () => {
     if (submitting || (delivery === 'shipping' && payment === 'cash')) return
     setSubmitting(true)
+    setCheckoutError('')
     try {
+      if (payment === 'mercadopago' && pendingPaymentCode) {
+        const preference = await ops.createMercadoPagoPreference(pendingPaymentCode)
+        if (!/^https:\/\/([a-z0-9-]+\.)*mercadopago\.com(\/|$)/i.test(preference.checkoutUrl || '')) throw new Error('Mercado Pago devolvió un enlace inválido.')
+        window.location.assign(preference.checkoutUrl)
+        return
+      }
       const created = await createOrder({
         customerName: form.name.trim(), phone: form.phone.trim(), email: form.email.trim(),
         deliveryType: delivery, paymentMethod: payment,
@@ -123,10 +133,24 @@ export default function CheckoutPage() {
         items: items.map(item => ({ productId:item.id, variantId:item.variant.id, quantity:item.quantity }))
       })
       setCompleted(true)
-      navigate(`/seguimiento/${created.trackingCode}`)
+      if (payment === 'mercadopago') {
+        setPendingPaymentCode(created.trackingCode)
+        try {
+          const preference = await ops.createMercadoPagoPreference(created.trackingCode)
+          if (!/^https:\/\/([a-z0-9-]+\.)*mercadopago\.com(\/|$)/i.test(preference.checkoutUrl || '')) throw new Error('Mercado Pago devolvió un enlace inválido.')
+          window.location.assign(preference.checkoutUrl)
+        } catch (error) {
+          setCheckoutError(`El pedido ${created.trackingCode} ya fue registrado, pero no pudimos abrir Mercado Pago: ${error.message}. Podés reintentar sin crear otro pedido.`)
+        }
+      } else navigate(`/seguimiento/${created.trackingCode}`)
+    } catch (error) {
+      setCheckoutError(error.message || 'No se pudo completar la operación.')
     } finally { setSubmitting(false) }
   }
 
+  if (pendingPaymentCode) {
+    return <section className="checkout-page"><div className="container checkout-shell"><div className="checkout-main-card"><h1>Pedido registrado</h1><p>Guardá tu código de seguimiento: <strong>{pendingPaymentCode}</strong>.</p><p>{checkoutError || 'Estamos abriendo el sitio seguro de Mercado Pago.'}</p><div className="checkout-actions"><Link className="btn btn-secondary" to={`/seguimiento/${encodeURIComponent(pendingPaymentCode)}`}>Ver seguimiento</Link><button className="btn btn-primary" disabled={submitting} onClick={finishDemo}>{submitting ? 'Preparando pago…' : 'Reintentar pago con Mercado Pago'}</button></div></div></div></section>
+  }
   const shippingAddress = [
     [form.street, form.number].filter(Boolean).join(' '),
     form.city,
@@ -143,6 +167,7 @@ export default function CheckoutPage() {
           <ChevronLeft size={17} /> Volver al carrito
         </Link>
 
+        {checkoutError && <div role="alert" className="admin-inline-message">{checkoutError}</div>}
         <div className="checkout-heading">
           <span className="section-kicker">Compra online</span>
           <h1>Finalizá tu pedido</h1>

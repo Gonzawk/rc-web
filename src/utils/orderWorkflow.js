@@ -44,7 +44,7 @@ export const nextOperationalStatus = order => {
 export const canCancelOrder = order => Boolean(order && !order.saleId && ['received', 'confirmed', 'awaiting_payment', 'ready_for_pickup'].includes(order.status))
 
 export const canConfirmPayment = order => {
-  if (!order || order.saleId || order.paymentStatus === 'approved' || isFinalOrderStatus(order.status)) return false
+  if (!order || order.paymentMethod === 'mercadopago' || order.saleId || order.paymentStatus === 'approved' || isFinalOrderStatus(order.status)) return false
   return ['confirmed', 'awaiting_payment', 'ready_for_pickup'].includes(order.status)
 }
 
