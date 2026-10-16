@@ -28,10 +28,11 @@ export default function PublicHeader(){
       </div>
       <nav className={`shop-nav ${open?'open':''}`}><div className="container shop-nav-inner">
         <NavLink to="/" end onClick={close}>Inicio</NavLink>
-        <button className={`nav-products-button ${mega?'active':''}`} onClick={()=>setMega(v=>!v)} onMouseEnter={()=>window.innerWidth>900&&setMega(true)}>Productos <ChevronDown size={14}/></button>
-        <div className="rc-nav-brands"><button type="button" className="nav-products-button" aria-expanded={brandsOpen} onClick={()=>{setBrandsOpen(v=>!v);setMega(false)}}>Marcas <ChevronDown size={14}/></button>{brandsOpen&&<div className="rc-nav-brand-list">{data.brands.filter(x=>x.active).map(b=><Link key={b.id} to={`/catalogo?marca=${encodeURIComponent(b.name)}`} onClick={close}>{b.name}</Link>)}</div>}</div><a href="/#motos" onClick={close}>Motos por modelo</a><a href="/#accesorios" onClick={close}>Accesorios</a><NavLink to="/seguimiento" onClick={close}>Seguimiento</NavLink><a href={wa} target="_blank" rel="noreferrer">Contacto</a><a href={wa} target="_blank" rel="noreferrer" className="wholesale-nav">Mayoristas</a><a href="/#como-comprar" onClick={close}>¿Cómo comprar?</a>
+        <button className={`nav-products-button ${mega?'active':''}`} onClick={()=>{setMega(v=>!v);setBrandsOpen(false)}} onMouseEnter={()=>window.innerWidth>900&&setMega(true)}>Productos <ChevronDown size={14}/></button>
+        {mega&&<div className="rc-mobile-product-menu"><ProductMegaMenu onNavigate={close}/></div>}
+        <div className="rc-nav-brands"><button type="button" className="nav-products-button" aria-expanded={brandsOpen} onClick={()=>{setBrandsOpen(v=>!v);setMega(false)}}>Marcas <ChevronDown size={14}/></button>{brandsOpen&&<div className="rc-nav-brand-list" role="menu">{data.brands.filter(x=>x.active).map(b=><Link key={b.id} to={`/catalogo?marca=${encodeURIComponent(b.name)}`} onClick={close}>{b.name}</Link>)}</div>}</div><a href="/#motos" onClick={close}>Motos por modelo</a><a href="/#accesorios" onClick={close}>Accesorios</a><NavLink to="/seguimiento" onClick={close}>Seguimiento</NavLink><a href={wa} target="_blank" rel="noreferrer">Contacto</a><a href={wa} target="_blank" rel="noreferrer" className="wholesale-nav">Mayoristas</a><a href="/#como-comprar" onClick={close}>¿Cómo comprar?</a>
       </div></nav>
-      {mega&&<div onMouseLeave={() => { if (window.innerWidth > 900) { setMega(false); setBrandsOpen(false) } }}><ProductMegaMenu onNavigate={close}/></div>}
+      {mega&&<div className="rc-desktop-product-menu" onMouseLeave={() => { if (window.innerWidth > 900) { setMega(false); setBrandsOpen(false) } }}><ProductMegaMenu onNavigate={close}/></div>}
     </header>
   </>
 }

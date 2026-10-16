@@ -9,6 +9,8 @@ export const siteConfig = {
   email: import.meta.env.VITE_RC_EMAIL || '',
   address: import.meta.env.VITE_RC_ADDRESS || '',
   instagram: import.meta.env.VITE_RC_INSTAGRAM || '',
+  facebook: '',
+  youtube: '',
   domain: import.meta.env.VITE_RC_DOMAIN || '',
   businessHours: import.meta.env.VITE_RC_BUSINESS_HOURS || '',
   storeEnabled: true,

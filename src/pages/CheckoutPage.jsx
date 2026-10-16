@@ -1,4 +1,6 @@
-import { useMemo, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
+import BankTransferDetails from '../components/BankTransferDetails'
+import { operationsRepository as ops } from '../repositories/operationsRepository'
 import {
   CheckCircle2,
   ChevronLeft,
@@ -11,7 +13,6 @@ import {
 import { Link, Navigate, useNavigate } from 'react-router-dom'
 import { useAppData } from '../context/AppDataContext'
 import { money } from '../utils/commerce'
-import { operationsRepository as ops } from '../repositories/operationsRepository'
 
 const steps = ['Entrega', 'Datos', 'Pago', 'Confirmación']
 
@@ -25,13 +26,14 @@ export default function CheckoutPage() {
   const { data, loading, cart, cartHydrating, createOrder } = useAppData()
   const navigate = useNavigate()
 
+  const [bank,setBank] = useState(null)
+  useEffect(()=>{let active=true;ops.bankTransferPublic().then(x=>{if(active)setBank(x)}).catch(()=>{if(active)setBank({enabled:false})});return()=>{active=false}},[])
   const [step, setStep] = useState(0)
   const [delivery, setDelivery] = useState('pickup')
   const [payment, setPayment] = useState('mercadopago')
   const [completed, setCompleted] = useState(false)
   const [submitting, setSubmitting] = useState(false)
   const [checkoutError, setCheckoutError] = useState('')
-  const [pendingPaymentCode, setPendingPaymentCode] = useState('')
   const [form, setForm] = useState({
     name: '',
     phone: '',
@@ -117,12 +119,6 @@ export default function CheckoutPage() {
     setSubmitting(true)
     setCheckoutError('')
     try {
-      if (payment === 'mercadopago' && pendingPaymentCode) {
-        const preference = await ops.createMercadoPagoPreference(pendingPaymentCode)
-        if (!/^https:\/\/([a-z0-9-]+\.)*mercadopago\.com(\/|$)/i.test(preference.checkoutUrl || '')) throw new Error('Mercado Pago devolvió un enlace inválido.')
-        window.location.assign(preference.checkoutUrl)
-        return
-      }
       const created = await createOrder({
         customerName: form.name.trim(), phone: form.phone.trim(), email: form.email.trim(),
         deliveryType: delivery, paymentMethod: payment,
@@ -132,25 +128,14 @@ export default function CheckoutPage() {
         discountType: 'none', discountValue: 0,
         items: items.map(item => ({ productId:item.id, variantId:item.variant.id, quantity:item.quantity }))
       })
+      if (!created?.trackingCode) throw new Error('No recibimos el código de seguimiento. Contactá al comercio antes de repetir el pedido.')
       setCompleted(true)
-      if (payment === 'mercadopago') {
-        setPendingPaymentCode(created.trackingCode)
-        try {
-          const preference = await ops.createMercadoPagoPreference(created.trackingCode)
-          if (!/^https:\/\/([a-z0-9-]+\.)*mercadopago\.com(\/|$)/i.test(preference.checkoutUrl || '')) throw new Error('Mercado Pago devolvió un enlace inválido.')
-          window.location.assign(preference.checkoutUrl)
-        } catch (error) {
-          setCheckoutError(`El pedido ${created.trackingCode} ya fue registrado, pero no pudimos abrir Mercado Pago: ${error.message}. Podés reintentar sin crear otro pedido.`)
-        }
-      } else navigate(`/seguimiento/${created.trackingCode}`)
+      navigate(`/seguimiento/${encodeURIComponent(created.trackingCode)}`, { replace: true })
     } catch (error) {
       setCheckoutError(error.message || 'No se pudo completar la operación.')
     } finally { setSubmitting(false) }
   }
 
-  if (pendingPaymentCode) {
-    return <section className="checkout-page"><div className="container checkout-shell"><div className="checkout-main-card"><h1>Pedido registrado</h1><p>Guardá tu código de seguimiento: <strong>{pendingPaymentCode}</strong>.</p><p>{checkoutError || 'Estamos abriendo el sitio seguro de Mercado Pago.'}</p><div className="checkout-actions"><Link className="btn btn-secondary" to={`/seguimiento/${encodeURIComponent(pendingPaymentCode)}`}>Ver seguimiento</Link><button className="btn btn-primary" disabled={submitting} onClick={finishDemo}>{submitting ? 'Preparando pago…' : 'Reintentar pago con Mercado Pago'}</button></div></div></div></section>
-  }
   const shippingAddress = [
     [form.street, form.number].filter(Boolean).join(' '),
     form.city,
@@ -327,6 +312,7 @@ export default function CheckoutPage() {
             {step === 2 && (
               <>
                 <h2>Elegí cómo pagar</h2>
+                <div className="payment-demo-note" role="note"><strong>Reserva y plazo de pago: 24 horas</strong><p>Tu pedido reservará el stock por 24 horas desde su creación. Si el pago no se aprueba y registra dentro de ese plazo, el pedido vencerá y el stock será liberado. Para comprar luego, deberás crear un pedido nuevo. Los pagos en efectivo y transferencia deben ser verificados y registrados por el comercio dentro del mismo plazo.</p></div>
                 <div className="payment-options">
                   <button
                     type="button"
@@ -363,17 +349,20 @@ export default function CheckoutPage() {
                   <button
                     type="button"
                     className={payment === 'transfer' ? 'selected' : ''}
-                    onClick={() => setPayment('transfer')}
+                    onClick={() => { if(bank?.enabled) setPayment('transfer') }}
+                    disabled={!bank?.enabled}
                   >
                     <CreditCard />
                     <div>
                       <strong>Transferencia</strong>
                       <span>
-                        Al confirmar disponibilidad te mostraremos los datos bancarios para realizar el pago y enviar el comprobante.
+                        {bank?.enabled ? "Datos bancarios disponibles al elegir este método. La acreditación será verificada por el comercio." : "Temporalmente no disponible: el comercio debe habilitar sus datos bancarios."}
                       </span>
                     </div>
                     <b className="discount-badge">20% OFF excepto ofertas</b>
                   </button>
+
+                  {payment === 'transfer' && <div className="payment-demo-note"><h3>Datos para transferir</h3><BankTransferDetails settings={bank}/><p>El pago no se acredita automáticamente. Conservá el comprobante y aguardá la verificación del comercio.</p></div>}
                 </div>
 
 
@@ -405,7 +394,7 @@ export default function CheckoutPage() {
                       <b>{paymentLabels[payment]}</b>
                       {cashDiscount
                         ? '20% de descuento aplicado sobre productos sin oferta'
-                        : payment === 'transfer' ? 'Datos bancarios disponibles cuando RC confirme el pedido' : 'Pago según la modalidad elegida'}
+                        : payment === 'transfer' ? 'Transferí a la cuenta informada; el comercio verificará la acreditación' : 'Pago según la modalidad elegida'}
                     </span>
                   </div>
                 </div>
@@ -442,6 +431,7 @@ export default function CheckoutPage() {
                 <CheckCircle2 size={42} />
                 <span className="section-kicker">Pedido recibido</span>
                 <h2>Recibimos tu pedido.</h2>
+                <p><strong>Importante:</strong> el pedido vence 24 horas después de su creación si el pago no fue aprobado y registrado. Consultá la fecha límite exacta en el seguimiento.</p>
                 <p>
                   RC Repuestos y Accesorios revisará disponibilidad y confirmará el pedido antes de avanzar con el pago y la entrega.
                 </p>

@@ -26,18 +26,23 @@ export const paymentMethodLabel = {
 
 export const isFinalOrderStatus = status => ['completed', 'cancelled'].includes(status)
 
+// Refleja exactamente las transiciones autorizadas por OrdersController.Advance.
+// El estado de pago acreditado no omite el paso Confirmado -> EsperandoPago.
 export const nextOperationalStatus = order => {
   if (!order || isFinalOrderStatus(order.status)) return null
-  if (order.status === 'received') return order.deliveryType === 'pickup' && order.paymentMethod === 'cash' ? 'ready_for_pickup' : 'confirmed'
-  if (order.status === 'confirmed') return order.paymentStatus === 'approved'
-    ? (order.deliveryType === 'shipping' ? 'pending_shipment' : 'ready_for_pickup')
-    : 'awaiting_payment'
-  if (order.status === 'awaiting_payment') return order.paymentStatus === 'approved'
-    ? (order.deliveryType === 'shipping' ? 'pending_shipment' : 'ready_for_pickup')
-    : null
+  if (order.status === 'received')
+    return order.deliveryType === 'pickup' && order.paymentMethod === 'cash'
+      ? 'ready_for_pickup'
+      : 'confirmed'
+  if (order.status === 'confirmed') return 'awaiting_payment'
+  if (order.status === 'awaiting_payment')
+    return order.paymentStatus === 'approved'
+      ? (order.deliveryType === 'pickup' ? 'ready_for_pickup' : 'pending_shipment')
+      : null
   if (order.status === 'pending_shipment') return 'shipped'
   if (order.status === 'shipped') return 'completed'
-  if (order.status === 'ready_for_pickup') return order.paymentStatus === 'approved' ? 'completed' : null
+  if (order.status === 'ready_for_pickup')
+    return order.paymentStatus === 'approved' ? 'completed' : null
   return null
 }
 

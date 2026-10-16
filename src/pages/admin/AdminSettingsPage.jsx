@@ -1,3 +1,5 @@
+import AdminBankTransferSettings from '../../components/AdminBankTransferSettings'
+import { Landmark, X } from 'lucide-react'
 import { useEffect, useState } from 'react'
 import { Save } from 'lucide-react'
 import BrandLogo from '../../components/BrandLogo'
@@ -7,6 +9,7 @@ export default function AdminSettingsPage() {
   const { data, loading, saveSettings } = useAppData()
   const [form, setForm] = useState(null)
   const [saved, setSaved] = useState(false)
+  const [bankModalOpen, setBankModalOpen] = useState(false)
 
   useEffect(() => { if (data) setForm(data.settings) }, [data])
   if (loading || !form) return <div className="screen-loader">Cargando configuración…</div>
@@ -44,6 +47,7 @@ export default function AdminSettingsPage() {
             <h2>Contacto</h2>
             <div className="form-grid"><label><span>Teléfono</span><input value={form.phone} onChange={e => setForm({...form,phone:e.target.value})}/></label><label><span>WhatsApp técnico</span><input value={form.whatsapp} onChange={e => setForm({...form,whatsapp:e.target.value})}/></label></div>
             <div className="form-grid"><label><span>Email</span><input value={form.email} onChange={e => setForm({...form,email:e.target.value})}/></label><label><span>Instagram</span><input value={form.instagram} onChange={e => setForm({...form,instagram:e.target.value})}/></label></div>
+            <div className="form-grid"><label><span>Facebook</span><input value={form.facebook || ''} onChange={e => setForm({...form,facebook:e.target.value})} placeholder="Usuario o URL de Facebook"/></label><label><span>YouTube</span><input value={form.youtube || ''} onChange={e => setForm({...form,youtube:e.target.value})} placeholder="Usuario o URL de YouTube"/></label></div>
             <label><span>Dirección / ubicación</span><input value={form.address} onChange={e => setForm({...form,address:e.target.value})}/></label>
             <label><span>Horario comercial</span><input value={form.businessHours} onChange={e => setForm({...form,businessHours:e.target.value})}/></label>
             <label><span>Mensaje de entrega/retiro</span><input value={form.storePickupMessage || ''} onChange={e => setForm({...form,storePickupMessage:e.target.value})}/></label>
@@ -60,6 +64,12 @@ export default function AdminSettingsPage() {
           </section>
 
           <section className="settings-section">
+            <h2>Medios de pago</h2>
+            <p className="settings-help">Administrá los datos que se muestran a los clientes cuando eligen transferencia bancaria. La acreditación se confirma únicamente después de verificar el pago.</p>
+            <div><button type="button" className="btn btn-secondary" onClick={() => setBankModalOpen(true)}><Landmark size={17}/> Configurar transferencia bancaria</button></div>
+          </section>
+
+          <section className="settings-section">
             <h2>Opciones del sitio</h2>
             <div className="settings-toggles">
               <label><input type="checkbox" checked={form.storeEnabled} onChange={e => setForm({...form,storeEnabled:e.target.checked})}/><span><strong>Catálogo público habilitado</strong><small>Muestra el catálogo de repuestos al cliente.</small></span></label>
@@ -72,6 +82,14 @@ export default function AdminSettingsPage() {
           <button className="btn btn-primary settings-save"><Save size={17}/> {saved ? 'Guardado' : 'Guardar configuración'}</button>
         </form>
       </div>
+      {bankModalOpen && (
+        <div className="modal-backdrop" onMouseDown={e => { if (e.target === e.currentTarget) setBankModalOpen(false) }}>
+          <div className="modal bank-settings-modal" role="dialog" aria-modal="true" aria-labelledby="bank-settings-title">
+            <button type="button" className="modal-close" aria-label="Cerrar configuración bancaria" onClick={() => setBankModalOpen(false)}><X size={19}/></button>
+            <AdminBankTransferSettings />
+          </div>
+        </div>
+      )}
     </>
   )
 }
