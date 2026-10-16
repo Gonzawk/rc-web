@@ -5,6 +5,7 @@ import BrandLogo from './BrandLogo'
 import ProductMegaMenu from './ProductMegaMenu'
 import { useAppData } from '../context/AppDataContext'
 import { useTheme } from '../context/ThemeContext'
+import { whatsappUrl } from '../utils/whatsapp'
 
 export default function PublicHeader(){
   const [open,setOpen]=useState(false)
@@ -16,21 +17,21 @@ export default function PublicHeader(){
   const {theme,toggleTheme}=useTheme()
   if(!data)return null
   const submit=e=>{e.preventDefault();const q=search.trim();navigate(q?`/catalogo?q=${encodeURIComponent(q)}`:'/catalogo');setOpen(false);setMega(false);setBrandsOpen(false)}
-  const wa=`https://wa.me/${data.settings.whatsapp}`
+  const wa=whatsappUrl(data.settings || {})
   const close=()=>{setOpen(false);setMega(false);setBrandsOpen(false)}
   return <>
-    <div className="shop-utility"><div className="container shop-utility-inner"><div className="utility-left"><span>🚚 Envíos a todo el país</span><span>💳 Consultá medios de pago</span><span>🏷️ Venta por mayor y menor</span></div><a href={wa} target="_blank" rel="noreferrer"><MessageCircle size={14}/> Atención por <b>WhatsApp</b></a></div></div>
+    <div className="shop-utility"><div className="container shop-utility-inner"><div className="utility-left"><span>🚚 Envíos a todo el país</span><span>💳 Consultá medios de pago</span><span>🏷️ Venta por mayor y menor</span></div>{wa && <a href={wa} target="_blank" rel="noreferrer"><MessageCircle size={14}/> Atención por <b>WhatsApp</b></a>}</div></div>
     <header className="shop-header">
       <div className="container shop-header-main">
         <Link to="/" className="shop-logo-link" aria-label="RC Repuestos y Accesorios" onClick={close}><BrandLogo/></Link>
         <form className="shop-search" onSubmit={submit}><input value={search} onChange={e=>setSearch(e.target.value)} placeholder="¿Qué estás buscando? Ej: pastillas, carburador, NGK, Wave 110..."/><button aria-label="Buscar"><Search size={21}/></button></form>
-        <div className="shop-actions"><button className="shop-theme-toggle" onClick={toggleTheme} aria-label={theme==='dark'?'Activar tema claro':'Activar tema oscuro'} title={theme==='dark'?'Modo claro':'Modo oscuro'}>{theme==='dark'?<Sun size={21}/>:<Moon size={21}/>}</button><a className="shop-action desktop-action" href={wa} target="_blank" rel="noreferrer"><Headphones size={23}/><span>Ayuda</span></a><Link className="shop-action" to="/carrito"><span className="shop-cart-wrap"><ShoppingCart size={26}/>{cartCount>0&&<b>{cartCount}</b>}</span><span>Mi pedido</span></Link><button className="shop-menu-btn" onClick={()=>setOpen(v=>!v)} aria-label="Abrir menú">{open?<X/>:<Menu/>}</button></div>
+        <div className="shop-actions"><button type="button" className="shop-theme-toggle" onClick={toggleTheme} aria-label={theme==='dark'?'Activar tema claro':'Activar tema oscuro'} title={theme==='dark'?'Modo claro':'Modo oscuro'}>{theme==='dark'?<Sun size={21}/>:<Moon size={21}/>}</button>{wa && <a className="shop-action desktop-action" href={wa} target="_blank" rel="noreferrer"><Headphones size={23}/><span>Ayuda</span></a>}<Link className="shop-action" to="/carrito"><span className="shop-cart-wrap"><ShoppingCart size={26}/>{cartCount>0&&<b>{cartCount}</b>}</span><span>Mi pedido</span></Link><button type="button" className="shop-menu-btn" onClick={()=>setOpen(v=>!v)} aria-expanded={open} aria-label={open?"Cerrar menú":"Abrir menú"}>{open?<X/>:<Menu/>}</button></div>
       </div>
       <nav className={`shop-nav ${open?'open':''}`}><div className="container shop-nav-inner">
         <NavLink to="/" end onClick={close}>Inicio</NavLink>
-        <button className={`nav-products-button ${mega?'active':''}`} onClick={()=>{setMega(v=>!v);setBrandsOpen(false)}} onMouseEnter={()=>window.innerWidth>900&&setMega(true)}>Productos <ChevronDown size={14}/></button>
+        <button type="button" aria-expanded={mega} className={`nav-products-button ${mega?'active':''}`} onClick={()=>{setMega(v=>!v);setBrandsOpen(false)}} onMouseEnter={()=>window.innerWidth>900&&setMega(true)}>Productos <ChevronDown size={14}/></button>
         {mega&&<div className="rc-mobile-product-menu"><ProductMegaMenu onNavigate={close}/></div>}
-        <div className="rc-nav-brands"><button type="button" className="nav-products-button" aria-expanded={brandsOpen} onClick={()=>{setBrandsOpen(v=>!v);setMega(false)}}>Marcas <ChevronDown size={14}/></button>{brandsOpen&&<div className="rc-nav-brand-list" role="menu">{data.brands.filter(x=>x.active).map(b=><Link key={b.id} to={`/catalogo?marca=${encodeURIComponent(b.name)}`} onClick={close}>{b.name}</Link>)}</div>}</div><a href="/#motos" onClick={close}>Motos por modelo</a><a href="/#accesorios" onClick={close}>Accesorios</a><NavLink to="/seguimiento" onClick={close}>Seguimiento</NavLink><a href={wa} target="_blank" rel="noreferrer">Contacto</a><a href={wa} target="_blank" rel="noreferrer" className="wholesale-nav">Mayoristas</a><a href="/#como-comprar" onClick={close}>¿Cómo comprar?</a>
+        <div className="rc-nav-brands"><button type="button" className="nav-products-button" aria-expanded={brandsOpen} onClick={()=>{setBrandsOpen(v=>!v);setMega(false)}}>Marcas <ChevronDown size={14}/></button>{brandsOpen&&<div className="rc-nav-brand-list" role="menu">{data.brands.filter(x=>x.active).map(b=><Link key={b.id} to={`/catalogo?marca=${encodeURIComponent(b.name)}`} onClick={close}>{b.name}</Link>)}</div>}</div><a href="/#motos" onClick={close}>Motos por modelo</a><a href="/#accesorios" onClick={close}>Accesorios</a><NavLink to="/seguimiento" onClick={close}>Seguimiento</NavLink>{wa && <a href={wa} target="_blank" rel="noreferrer">Contacto</a>}{wa && <a href={whatsappUrl(data.settings || {}, "Hola RC Repuestos, quisiera consultar por compras mayoristas.")} target="_blank" rel="noreferrer" className="wholesale-nav">Mayoristas</a>}<a href="/#como-comprar" onClick={close}>¿Cómo comprar?</a>
       </div></nav>
       {mega&&<div className="rc-desktop-product-menu" onMouseLeave={() => { if (window.innerWidth > 900) { setMega(false); setBrandsOpen(false) } }}><ProductMegaMenu onNavigate={close}/></div>}
     </header>
