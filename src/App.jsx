@@ -35,7 +35,7 @@ export default function App(){return <ThemeProvider><AppDataProvider><BrowserRou
   <Route element={<PublicLayout/>}>
     <Route path="/" element={<HomePage/>}/>
     <Route path="/catalogo" element={<StorePage/>}/><Route path="/store" element={<StorePage/>}/>
-    <Route path="/producto/:slug" element={<ProductDetailPage/>}/>
+    <Route path="/producto/:slug" element={<ProductDetailPage/>}/><Route path="/p/:slug" element={<ProductDetailPage/>}/>
     <Route path="/carrito" element={<CartPage/>}/><Route path="/checkout" element={<CheckoutPage/>}/>
     <Route path="/seguimiento" element={<OrderTrackingSearchPage/>}/><Route path="/seguimiento/:trackingCode" element={<OrderStatusPage/>}/>
   </Route>

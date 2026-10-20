@@ -750,3 +750,10 @@ html[data-theme='dark'] .offer-old-price{color:#9299a3}
   .shop-actions { gap:3px; }
   .shop-theme-toggle,.shop-menu-btn { width:36px; height:36px; min-width:36px; }
 }
+
+/* Compartir productos: botón secundario adaptable a tema y móvil. */
+.rc-product-share-wrap{position:relative;display:flex;flex-direction:column;align-items:stretch;margin-top:9px;gap:5px}
+.rc-product-share-button{display:flex!important;align-items:center;justify-content:center;gap:8px;width:100%;min-height:38px;height:auto!important;padding:8px 12px!important;background:transparent!important;border:1px solid currentColor!important;border-radius:6px!important;color:inherit!important;font-size:12px!important;font-weight:700!important;cursor:pointer}
+.rc-product-share-button:hover{background:rgba(128,128,128,.12)!important}
+.rc-product-share-feedback{font-size:11px;color:inherit;opacity:.85;text-align:center;line-height:1.4}
+.rc-detail-copy>.rc-product-share-wrap{max-width:360px}

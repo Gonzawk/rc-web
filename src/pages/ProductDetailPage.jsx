@@ -1,3 +1,4 @@
+import ShareProductButton from '../components/ShareProductButton'
 import {useEffect,useMemo,useState} from 'react'
 import {Link,useParams} from 'react-router-dom'
 import {ArrowLeft,Check,ShoppingCart} from 'lucide-react'
@@ -28,6 +29,6 @@ export default function ProductDetailPage(){
    {variants.length>1&&<div className={`rc-detail-variants ${isColorOnly(variants)?'rc-color-only':''}`}><strong>{isColorOnly(variants)?'Elegí un color':'Elegí una opción'}</strong><div>{variants.map(v=>{const colorOnly=isColorOnly(variants);return <button type="button" className={selected?.id===v.id?'selected':''} onClick={()=>{setSelectedId(v.id);setAdded(false)}} key={v.id} aria-label={colorOnly?`Color ${v.color}`:variantLabel(v)} title={colorOnly?v.color:variantLabel(v)}>{v.color&&<i style={swatchStyle(v)}/>} {!colorOnly&&<span>{[v.size,v.name].filter(Boolean).join(' · ')||(v.color?null:variantLabel(v))}</span>}</button>})}</div></div>}
    {variants.length===1&&selected?.name&&<div className="rc-detail-meta"><b>Presentación</b><span>{selected.name}</span></div>}
    <div className="rc-detail-price"><span>Precio</span>{data.settings.showPrices&&product.offerActive&&Number(selected?.listPrice)>Number(selected?.price)&&<del>{money(selected.listPrice)}</del>}<strong>{data.settings.showPrices&&Number(selected?.price)>0?money(selected.price):'Consultar'}</strong>{product.offerActive&&Number(selected?.listPrice)>Number(selected?.price)&&<em className="offer-badge">OFERTA</em>}<InstallmentPrice price={selected?.price} showPrices={data.settings.showPrices}/><CashTransferPrice product={{...product,variants:selected?[selected]:[]}} showPrices={data.settings.showPrices}/><small>{stock>0?`${stock} disponibles`:'Sin stock'}</small></div>
-   <button className="rc-add-btn" disabled={!selected||stock<=0} onClick={()=>{addToCart(product.id,1,selected.id);setAdded(true)}}>{added?<><Check size={18}/> Agregado</>:<><ShoppingCart size={18}/> Agregar al pedido</>}</button>
+   <button className="rc-add-btn" disabled={!selected||stock<=0} onClick={()=>{addToCart(product.id,1,selected.id);setAdded(true)}}>{added?<><Check size={18}/> Agregado</>:<><ShoppingCart size={18}/> Agregar al pedido</>}</button><ShareProductButton product={product}/>
   </div></div></div></section>
 }
