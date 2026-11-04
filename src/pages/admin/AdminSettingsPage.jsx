@@ -1,4 +1,5 @@
 import AdminBankTransferSettings from '../../components/AdminBankTransferSettings'
+import AdminEmailNotifications from '../../components/AdminEmailNotifications'
 import { Landmark, X } from 'lucide-react'
 import { useEffect, useState } from 'react'
 import { Save } from 'lucide-react'
@@ -82,6 +83,7 @@ export default function AdminSettingsPage() {
           <button className="btn btn-primary settings-save"><Save size={17}/> {saved ? 'Guardado' : 'Guardar configuración'}</button>
         </form>
       </div>
+      <div className="settings-layout"><div/><div className="settings-form"><AdminEmailNotifications/></div></div>
       {bankModalOpen && (
         <div className="modal-backdrop" onMouseDown={e => { if (e.target === e.currentTarget) setBankModalOpen(false) }}>
           <div className="modal bank-settings-modal" role="dialog" aria-modal="true" aria-labelledby="bank-settings-title">

@@ -3,9 +3,9 @@ import { money } from '../utils/commerce'
 const INSTALLMENTS = 3
 
 /** Solo informativo. El cobro real y las cuotas se verifican en el proveedor de pagos. */
-export default function InstallmentPrice({ price, showPrices = true, from = false }) {
+export default function InstallmentPrice({ price, showPrices = true, from = false, eligible = true }) {
   const amount = Number(price)
-  if (!showPrices || !Number.isFinite(amount) || amount <= 0) return null
+  if (!eligible || !showPrices || !Number.isFinite(amount) || amount <= 0) return null
 
   const installment = Math.round((amount / INSTALLMENTS) * 100) / 100
 

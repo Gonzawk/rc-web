@@ -13,6 +13,7 @@ import {
 import { Link, Navigate, useNavigate } from 'react-router-dom'
 import { useAppData } from '../context/AppDataContext'
 import { money } from '../utils/commerce'
+import { priceForQuantity } from '../utils/wholesalePricing'
 
 const steps = ['Entrega', 'Datos', 'Pago', 'Confirmación']
 
@@ -53,16 +54,25 @@ export default function CheckoutPage() {
       .map(row => {
         const product = data.products.find(x => x.id === row.productId)
         const variant = product?.variants?.find(v=>v.id===row.variantId)||product?.variants?.find(v=>v.isDefault)
-        return product&&variant
-          ? {
-              ...product, variant, price:variant.price,
-              quantity: row.quantity,
-              subtotal: variant.price * row.quantity
-            }
-          : null
+        if (!product || !variant) return null
+        const stock = Math.max(0, Number(variant.availableStock ?? 0))
+        const quantity = Math.min(Math.max(1, Number(row.quantity || 1)), stock)
+        if (quantity <= 0) return null
+        const pricing = priceForQuantity(product, variant, quantity)
+        return {...product, variant, pricing, price: pricing.price,
+          quantity, subtotal: pricing.price * quantity}
       })
       .filter(Boolean)
   }, [data, cart])
+
+  const hasRestrictedProducts = items.some(item => item.pricing.promotional)
+  const paymentAllowed = method => method === 'transfer' ? Boolean(bank?.enabled) :
+    method === 'cash' ? delivery === 'pickup' : method === 'mercadopago' ? !hasRestrictedProducts : false
+  useEffect(() => {
+    if (hasRestrictedProducts && payment === 'mercadopago') setPayment(bank?.enabled ? 'transfer' : 'cash')
+    if (delivery === 'shipping' && payment === 'cash') setPayment(hasRestrictedProducts ? 'transfer' : 'mercadopago')
+    if (payment === 'transfer' && bank?.enabled === false && delivery === 'pickup') setPayment('cash')
+  }, [hasRestrictedProducts, delivery, payment, bank?.enabled])
 
   if (loading || cartHydrating) {
     return <div className="screen-loader">Preparando checkout…</div>
@@ -77,8 +87,8 @@ export default function CheckoutPage() {
   // Vista previa: el backend recalcula y persiste los importes definitivos.
   const cashDiscount = ['cash', 'transfer'].includes(payment)
     ? items.reduce((sum, item) => {
-        const onOffer = Boolean(item.offerActive && item.variant.offerActive)
-        return sum + (onOffer ? 0 : Math.round((item.subtotal + Number.EPSILON) * 0.20 * 100) / 100)
+        const eligible = item.pricing.discountEligible
+        return sum + (!eligible ? 0 : Math.round((item.subtotal + Number.EPSILON) * 0.20 * 100) / 100)
       }, 0)
     : 0
 
@@ -99,7 +109,7 @@ export default function CheckoutPage() {
     }
 
     // Paso 3: elegir medio de pago.
-    if (step === 2) return Boolean(payment && (delivery === 'pickup' || payment !== 'cash'))
+    if (step === 2) return paymentAllowed(payment)
 
     return true
   }
@@ -115,7 +125,7 @@ export default function CheckoutPage() {
   }
 
   const finishDemo = async () => {
-    if (submitting || (delivery === 'shipping' && payment === 'cash')) return
+    if (submitting || !paymentAllowed(payment)) { setCheckoutError('Seleccioná un medio de pago permitido para este pedido.'); return }
     setSubmitting(true)
     setCheckoutError('')
     try {
@@ -197,7 +207,7 @@ export default function CheckoutPage() {
                   <button
                     type="button"
                     className={delivery === 'shipping' ? 'selected' : ''}
-                    onClick={() => { setDelivery('shipping'); setPayment('mercadopago') }}
+                    onClick={() => { setDelivery('shipping'); setPayment(hasRestrictedProducts ? 'transfer' : 'mercadopago') }}
                   >
                     <Truck />
                     <strong>Envío a domicilio</strong>
@@ -312,9 +322,11 @@ export default function CheckoutPage() {
             {step === 2 && (
               <>
                 <h2>Elegí cómo pagar</h2>
-                <div className="payment-demo-note" role="note"><strong>Reserva y plazo de pago: 24 horas</strong><p>Tu pedido reservará el stock por 24 horas desde su creación. Si el pago no se aprueba y registra dentro de ese plazo, el pedido vencerá y el stock será liberado. Para comprar luego, deberás crear un pedido nuevo. Los pagos en efectivo y transferencia deben ser verificados y registrados por el comercio dentro del mismo plazo.</p></div>
+                <div className="payment-demo-note" role="note"><strong>Disponibilidad, reserva y vencimiento del pedido</strong><p>En pedidos con Mercado Pago, la reserva de stock se realiza al crear el pedido. En pedidos de efectivo o transferencia, la reserva depende de la confirmación de disponibilidad por parte del comercio. Los pedidos pendientes pueden vencer según el plazo establecido; la confirmación y acreditación del pago son necesarias para completar la operación.</p></div>
+                {hasRestrictedProducts && <div className="payment-demo-note" role="note"><strong>Pago exclusivo en efectivo o transferencia</strong><p>Tu carrito incluye productos en oferta o con precio mayorista. {delivery === 'shipping' ? 'Para envíos solo se admite transferencia bancaria.' : 'Para retiro podés elegir efectivo o transferencia.'}</p></div>}
+                {hasRestrictedProducts && !bank?.enabled && delivery === 'shipping' && <div className="admin-inline-message" role="alert">La transferencia no está habilitada. No es posible finalizar este envío hasta que el comercio la habilite.</div>}
                 <div className="payment-options">
-                  <button
+                  {!hasRestrictedProducts && <button
                     type="button"
                     className={payment === 'mercadopago' ? 'selected' : ''}
                     onClick={() => setPayment('mercadopago')}
@@ -327,7 +339,7 @@ export default function CheckoutPage() {
                       </span>
                     </div>
                     <b>Precio publicado</b>
-                  </button>
+                  </button>}
 
                   {delivery === 'pickup' && <button
                     type="button"
@@ -343,7 +355,7 @@ export default function CheckoutPage() {
                           : 'Forma de pago a coordinar con el comercio.'}
                       </span>
                     </div>
-                    <b className="discount-badge">20% OFF excepto ofertas</b>
+                    <b className="discount-badge">20% OFF excepto ofertas y mayoristas</b>
                   </button>}
 
                   <button
@@ -359,7 +371,7 @@ export default function CheckoutPage() {
                         {bank?.enabled ? "Datos bancarios disponibles al elegir este método. La acreditación será verificada por el comercio." : "Temporalmente no disponible: el comercio debe habilitar sus datos bancarios."}
                       </span>
                     </div>
-                    <b className="discount-badge">20% OFF excepto ofertas</b>
+                    <b className="discount-badge">20% OFF excepto ofertas y mayoristas</b>
                   </button>
 
                   {payment === 'transfer' && <div className="payment-demo-note"><h3>Datos para transferir</h3><BankTransferDetails settings={bank}/><p>El pago no se acredita automáticamente. Conservá el comprobante y aguardá la verificación del comercio.</p></div>}
@@ -393,7 +405,7 @@ export default function CheckoutPage() {
                     <span>
                       <b>{paymentLabels[payment]}</b>
                       {cashDiscount
-                        ? '20% de descuento aplicado sobre productos sin oferta'
+                        ? '20% de descuento aplicado sobre productos elegibles'
                         : payment === 'transfer' ? 'Transferí a la cuenta informada; el comercio verificará la acreditación' : 'Pago según la modalidad elegida'}
                     </span>
                   </div>

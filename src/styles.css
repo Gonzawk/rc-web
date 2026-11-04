@@ -753,3 +753,10 @@ html[data-theme='dark'] .offer-old-price{color:#9299a3}
 
 .rc-detail-title-share{display:flex;align-items:flex-start;justify-content:space-between;gap:12px}.rc-detail-title-share h1{flex:1;min-width:0}.rc-share-product-btn{display:inline-flex;align-items:center;justify-content:center;flex:none;width:42px;height:42px;border:1px solid currentColor;border-radius:12px;background:transparent;color:inherit;cursor:pointer}.rc-share-product-btn:hover{opacity:.75}.rc-share-product-btn:focus-visible{outline:2px solid #ef1f26;outline-offset:3px}
 
+
+/* Precios mayoristas y aviso móvil de carrito */
+.rc-wholesale-label{font-size:11px;line-height:1.5;margin:8px 0;color:#ef3138;font-weight:700}
+.rc-wholesale-label strong{color:inherit;font-size:inherit}
+.rc-wholesale-label small{color:#888;font-weight:400}
+.rc-mobile-cart-toast{display:none}
+@media(max-width:767px){.rc-mobile-cart-toast{position:fixed;z-index:1200;left:12px;right:12px;bottom:calc(16px + env(safe-area-inset-bottom,0px));display:flex;align-items:center;gap:9px;background:#17191d;color:#fff;border:1px solid #42454a;box-shadow:0 12px 35px #0009;border-radius:12px;padding:12px;font-size:12px}.rc-mobile-cart-toast>span{flex:1}.rc-mobile-cart-toast>a{background:#e52630;color:#fff;padding:9px 11px;border-radius:7px;text-decoration:none;white-space:nowrap;font-weight:800}.rc-mobile-cart-toast>button{background:transparent;border:0;color:#fff;cursor:pointer;padding:4px}}
